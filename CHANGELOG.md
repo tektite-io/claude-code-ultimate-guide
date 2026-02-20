@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Documentation
+
+- **Claude Code Releases**: Updated tracking to v2.1.49
+  - `--worktree` / `-w` CLI flag + subagent `isolation: "worktree"` for isolated git worktrees
+  - `background: true` in agent definitions to always run as background task
+  - `ConfigChange` hook event for enterprise security auditing
+  - Simple mode now includes file edit tool; Sonnet 4.6 now has 1M context on Max plan
+
 ### Added
 
 - **Talk Preparation Pipeline** — 6-stage skill pipeline: raw material → conference talk → Kimi slides

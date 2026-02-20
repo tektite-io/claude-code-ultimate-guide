@@ -10,13 +10,13 @@ tags: [reference, release]
 > **Full details**: [github.com/anthropics/claude-code/CHANGELOG.md](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
 > **Machine-readable**: [claude-code-releases.yaml](../machine-readable/claude-code-releases.yaml)
 
-**Latest**: v2.1.47 | **Updated**: 2026-02-19
+**Latest**: v2.1.49 | **Updated**: 2026-02-20
 
 ---
 
 ## Quick Jump
 
-- [2.1.x Series (January-February 2026)](#21x-series-january-february-2026) — Fast mode Opus 4.6, PDF pages support, /debug command, Task management, claude.ai MCP connectors
+- [2.1.x Series (January-February 2026)](#21x-series-january-february-2026) — Worktree isolation, background agents, ConfigChange hook, Fast mode Opus 4.6, claude.ai MCP connectors
 - [2.0.x Series (Nov 2025 - Jan 2026)](#20x-series-november-2025---january-2026) — Opus 4.5, Claude in Chrome, Background agents
 - [Breaking Changes Summary](#breaking-changes-summary)
 - [Milestone Features](#milestone-features)
@@ -24,6 +24,34 @@ tags: [reference, release]
 ---
 
 ## 2.1.x Series (January-February 2026)
+
+### v2.1.49 (2026-02-20)
+
+- **New**: `--worktree` / `-w` CLI flag to start Claude in an isolated git worktree
+- **New**: Subagents support `isolation: "worktree"` for working in a temporary git worktree
+- **New**: `background: true` field in agent definitions to always run as a background task
+- **New**: `ConfigChange` hook event — fires when configuration files change during a session (enterprise security auditing + blocking)
+- **New**: Plugins can ship `settings.json` for default configuration
+- **New**: `--from-pr` flag to resume sessions linked to a specific GitHub PR (+ sessions auto-linked when created via `gh pr create`)
+- **New**: `PreToolUse` hooks can return `additionalContext` to the model
+- **New**: `plansDirectory` setting to customize where plan files are stored
+- **New**: `auto:N` syntax for configuring MCP tool search auto-enable threshold
+- **New**: `Setup` hook event triggered via `--init`, `--init-only`, or `--maintenance` CLI flags
+- **Changed**: Sonnet 4.5 1M context removed from Max plan — Sonnet 4.6 now has 1M context (switch in `/model`)
+- **Changed**: Simple mode now includes file edit tool (not just Bash)
+- **Fixed**: File-not-found errors now suggest corrected paths when model drops repo folder
+- **Fixed**: Ctrl+C and ESC silently ignored when background agents running + main thread idle (double-press within 3s now kills all agents)
+- **Fixed**: Plugin `enable`/`disable` auto-detects correct scope (no longer defaults to user scope)
+- **Fixed**: Context window blocking limit calculated too aggressively (~65% instead of ~98%)
+- **Fixed**: Memory issues causing crashes with parallel subagents
+- **Fixed**: Memory leak in long sessions where stream resources not cleaned up
+- **Fixed**: `@` symbol incorrectly triggering file autocomplete in bash mode
+- **Fixed**: Background agent results returning raw transcript data instead of final answer
+- **Fixed**: Slash command autocomplete selecting wrong command (e.g. `/context` vs `/compact`)
+- **Improved**: `@` mention file suggestion speed (~3× faster in git repos)
+- **Improved**: MCP connection: `list_changed` notification support for dynamic tool updates without reconnection
+- **Improved**: Skills invoke progress display; skill suggestions prioritize recently/frequently used
+- **Improved**: Incremental output for async agents; token count includes background agent tokens
 
 ### v2.1.47 (2026-02-19)
 

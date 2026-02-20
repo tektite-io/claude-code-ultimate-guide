@@ -3,8 +3,8 @@
 # Purpose: Track Claude Code product releases for documentation sync
 # Maintained: Manual updates when new releases are announced
 
-latest: "2.1.47"
-updated: "2026-02-19"
+latest: "2.1.49"
+updated: "2026-02-20"
 
 # ════════════════════════════════════════════════════════════════
 # RELEASES (newest first, condensed highlights only)
@@ -14,6 +14,15 @@ releases:
   # ─────────────────────────────────────────────────────────────
   # 2.1.x Series (January-February 2026)
   # ─────────────────────────────────────────────────────────────
+
+  - version: "2.1.49"
+    date: "2026-02-20"
+    highlights:
+      - "⭐ `--worktree` / `-w` flag to start Claude in isolated git worktree; subagents support `isolation: 'worktree'`"
+      - "Agent definitions support `background: true` to always run as background task"
+      - "`ConfigChange` hook event for enterprise security auditing (fires when config files change during session)"
+      - "Simple mode now includes file edit tool; many bug fixes for background agents, permissions, sessions"
+    breaking: []
 
   - version: "2.1.47"
     date: "2026-02-19"
