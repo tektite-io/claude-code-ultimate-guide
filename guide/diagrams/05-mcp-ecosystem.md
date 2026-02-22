@@ -16,33 +16,33 @@ The MCP ecosystem has 4 categories of servers — official, community-dev, commu
 
 ```mermaid
 flowchart TD
-    CC["Claude Code\n(MCP Client)"] --> OFF
+    CC["Claude Code<br/>(MCP Client)"] --> OFF
     CC --> DEV
     CC --> OPS
     CC --> LOCAL
 
     subgraph OFF["🏢 Official Servers"]
-        O1["context7\nLibrary documentation"]
-        O2["sequential-thinking\nMulti-step reasoning"]
-        O3["playwright\nBrowser automation"]
+        O1["context7<br/>Library documentation"]
+        O2["sequential-thinking<br/>Multi-step reasoning"]
+        O3["playwright<br/>Browser automation"]
     end
 
     subgraph DEV["👨‍💻 Community: Dev Tools"]
-        D1["semgrep\nSecurity scanning"]
-        D2["github\nPR management"]
-        D3["grepai\nSemantic code search"]
-        D4["filesystem-enhanced\nAdvanced file ops"]
+        D1["semgrep<br/>Security scanning"]
+        D2["github<br/>PR management"]
+        D3["grepai<br/>Semantic code search"]
+        D4["filesystem-enhanced<br/>Advanced file ops"]
     end
 
     subgraph OPS["⚙️ Community: Ops/Infra"]
-        OP1["kubernetes\nCluster management"]
-        OP2["docker\nContainer ops"]
-        OP3["aws\nCloud resources"]
+        OP1["kubernetes<br/>Cluster management"]
+        OP2["docker<br/>Container ops"]
+        OP3["aws<br/>Cloud resources"]
     end
 
     subgraph LOCAL["🔧 Local/Custom"]
-        L1["Project-specific\nMCP servers"]
-        L2["Internal APIs\nWrapped as MCP"]
+        L1["Project-specific<br/>MCP servers"]
+        L2["Internal APIs<br/>Wrapped as MCP"]
     end
 
     style CC fill:#E87E2F,color:#fff
@@ -84,22 +84,22 @@ MCP is a JSON-RPC protocol running over stdio or SSE. Claude Code acts as the cl
 ```mermaid
 flowchart LR
     subgraph CLAUDE["Claude Code (MCP Client)"]
-        CC1["Parse tool call\nfrom Claude response"]
+        CC1["Parse tool call<br/>from Claude response"]
         CC2["Match to MCP server"]
-        CC3["Use tool result\nin next API call"]
+        CC3["Use tool result<br/>in next API call"]
     end
 
     subgraph PROTO["MCP Protocol"]
-        P1["JSON-RPC Request\n{tool, params}"]
-        P2["Transport:\nstdio or SSE"]
-        P3["JSON-RPC Response\n{result or error}"]
+        P1["JSON-RPC Request<br/>{tool, params}"]
+        P2["Transport:<br/>stdio or SSE"]
+        P3["JSON-RPC Response<br/>{result or error}"]
     end
 
     subgraph SERVER["MCP Server"]
         S1["Receive tool call"]
-        S2["Execute action\n(API, file, CLI...)"]
-        S3["Return structured\nresult"]
-        EXT{{"External Service\nAPI / DB / CLI"}}
+        S2["Execute action<br/>(API, file, CLI...)"]
+        S3["Return structured<br/>result"]
+        EXT{{"External Service<br/>API / DB / CLI"}}
     end
 
     CC1 --> P1 --> P2 --> S1 --> S2 --> EXT
@@ -188,14 +188,14 @@ MCP server configurations can live in 4 different locations. The resolution orde
 
 ```mermaid
 flowchart TD
-    A["1️⃣ CLI: --mcp-config path/to/mcp.json\nHighest priority — overrides all"] --> B["2️⃣ Project: .claude/mcp.json\nTeam-shared, checked into git"]
-    B --> C["3️⃣ Project Root: .mcp.json\nAlternative project location"]
-    C --> D["4️⃣ Global: ~/.claude/mcp.json\nPersonal servers, all projects"]
-    D --> E["5️⃣ No MCP servers\nDefault (no config found)"]
+    A["1️⃣ CLI: --mcp-config path/to/mcp.json<br/>Highest priority — overrides all"] --> B["2️⃣ Project: .claude/mcp.json<br/>Team-shared, checked into git"]
+    B --> C["3️⃣ Project Root: .mcp.json<br/>Alternative project location"]
+    C --> D["4️⃣ Global: ~/.claude/mcp.json<br/>Personal servers, all projects"]
+    D --> E["5️⃣ No MCP servers<br/>Default (no config found)"]
 
-    A1["Use for:\nCI/CD overrides\ntemporary testing"] --> A
-    B1["Use for:\nTeam-shared servers\n(playwright, github)"] --> B
-    D1["Use for:\nPersonal tools\n(context7, grepai)"] --> D
+    A1["Use for:<br/>CI/CD overrides<br/>temporary testing"] --> A
+    B1["Use for:<br/>Team-shared servers<br/>(playwright, github)"] --> B
+    D1["Use for:<br/>Personal tools<br/>(context7, grepai)"] --> D
 
     style A fill:#E87E2F,color:#fff
     style B fill:#6DB3F2,color:#fff

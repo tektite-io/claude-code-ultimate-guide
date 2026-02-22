@@ -16,16 +16,16 @@ Claude Code's core execution is a single loop: parse → build prompt → call A
 
 ```mermaid
 flowchart TD
-    A([User Input]) --> B(Build System Prompt\n+ context + tools)
+    A([User Input]) --> B(Build System Prompt<br/>+ context + tools)
     B --> C{{Claude API Call}}
-    C --> D{Response\ncontains tool calls?}
+    C --> D{Response<br/>contains tool calls?}
     D -->|Yes| E(Parse tool calls)
-    E --> F(Execute each tool\nGlob, Grep, Bash...)
-    F --> G(Append tool results\nto conversation)
+    E --> F(Execute each tool<br/>Glob, Grep, Bash...)
+    F --> G(Append tool results<br/>to conversation)
     G --> C
     D -->|No| H(Extract text response)
     H --> I([Display to User])
-    I --> J{User sends\nnext message?}
+    I --> J{User sends<br/>next message?}
     J -->|Yes| A
     J -->|No| K([Session ends])
 
@@ -75,31 +75,31 @@ flowchart TD
     ROOT --> WORKFLOW
 
     subgraph READ["📖 Read Tools"]
-        R1[Glob\nFind files by pattern]
-        R2[Grep\nSearch file content]
-        R3[Read\nRead file content]
-        R4[LS\nList directory]
+        R1[Glob<br/>Find files by pattern]
+        R2[Grep<br/>Search file content]
+        R3[Read<br/>Read file content]
+        R4[LS<br/>List directory]
     end
 
     subgraph WRITE["✏️ Write Tools"]
-        W1[Write\nCreate new file]
-        W2[Edit\nModify existing file]
-        W3[MultiEdit\nBatch modifications]
+        W1[Write<br/>Create new file]
+        W2[Edit<br/>Modify existing file]
+        W3[MultiEdit<br/>Batch modifications]
     end
 
     subgraph EXECUTE["⚙️ Execute Tools"]
-        E1[Bash\nShell commands]
-        E2[Task\nSpawn sub-agent]
+        E1[Bash<br/>Shell commands]
+        E2[Task<br/>Spawn sub-agent]
     end
 
     subgraph WEB["🌐 Web Tools"]
-        WB1[WebSearch\nSearch the web]
-        WB2[WebFetch\nFetch URL content]
+        WB1[WebSearch<br/>Search the web]
+        WB2[WebFetch<br/>Fetch URL content]
     end
 
     subgraph WORKFLOW["📋 Workflow Tools"]
-        WF1[TodoWrite\nManage task list]
-        WF2[NotebookEdit\nJupyter notebooks]
+        WF1[TodoWrite<br/>Manage task list]
+        WF2[NotebookEdit<br/>Jupyter notebooks]
     end
 
     style ROOT fill:#E87E2F,color:#fff
@@ -156,8 +156,8 @@ sequenceDiagram
     T->>CC: Tool schemas (Glob, Grep, Bash...)
     CC->>CC: 5. Add working directory + git info
     CC->>CC: 6. Add MCP server capabilities
-    CC->>A: System prompt (assembled)\n+ User message
-    Note over A: One large call with\nall context embedded
+    CC->>A: System prompt (assembled)<br/>+ User message
+    Note over A: One large call with<br/>all context embedded
 ```
 
 <details>
@@ -196,17 +196,17 @@ sequenceDiagram
     P->>T: Task(prompt="do X", tools=[Read,Write,Bash])
     Note over T: Creates new Claude instance
     T->>S: spawn(prompt + tool grants ONLY)
-    Note over S: Does NOT receive:\n- Parent conversation\n- Parent tool results\n- Parent state
+    Note over S: Does NOT receive:<br/>- Parent conversation<br/>- Parent tool results<br/>- Parent state
 
     S->>EXT: read files, bash, web (as granted)
     EXT->>S: Results
 
-    Note over S: Independent reasoning\nwith limited context
+    Note over S: Independent reasoning<br/>with limited context
 
     S->>T: return "task complete: details..."
     Note over T: Only text passes back
     T->>P: Result string
-    Note over P: Parent gets text only\nNo shared state
+    Note over P: Parent gets text only<br/>No shared state
 ```
 
 <details>

@@ -16,21 +16,21 @@ Test-Driven Development adapted for Claude Code: write the failing test first, t
 
 ```mermaid
 flowchart TD
-    A([Start: New feature needed]) --> B(Write failing test\nwith human)
+    A([Start: New feature needed]) --> B(Write failing test<br/>with human)
     B --> C(Run tests)
-    C --> D{Tests fail\nas expected?}
-    D -->|No: tests pass\nbefore impl!| E(Fix test — it's too weak)
+    C --> D{Tests fail<br/>as expected?}
+    D -->|No: tests pass<br/>before impl!| E(Fix test — it's too weak)
     E --> B
-    D -->|Yes: RED ✓| F(Ask Claude to implement\nminimal code to pass)
+    D -->|Yes: RED ✓| F(Ask Claude to implement<br/>minimal code to pass)
     F --> G(Run tests again)
     G --> H{Tests pass?}
-    H -->|No| I(Diagnose with Claude\nfix implementation)
+    H -->|No| I(Diagnose with Claude<br/>fix implementation)
     I --> G
-    H -->|Yes: GREEN ✓| J{Code needs\nrefactoring?}
+    H -->|Yes: GREEN ✓| J{Code needs<br/>refactoring?}
     J -->|Yes| K(Refactor with Claude)
     K --> L(Run tests: still green?)
     L -->|No| I
-    L -->|Yes: REFACTOR ✓| M{More features\nneeded?}
+    L -->|Yes: REFACTOR ✓| M{More features<br/>needed?}
     J -->|No| M
     M -->|Yes| B
     M -->|No| N([Feature complete ✓])
@@ -78,20 +78,20 @@ Write the specification before the code. Claude uses the spec as the single sour
 
 ```mermaid
 flowchart LR
-    A([Idea / Requirement]) --> B(Write spec.md\nin natural language)
-    B --> C(Claude reviews spec\nfor clarity + completeness)
-    C --> D{Spec approved\n by human?}
-    D -->|No: gaps found| E(Refine spec\naddress gaps)
+    A([Idea / Requirement]) --> B(Write spec.md<br/>in natural language)
+    B --> C(Claude reviews spec<br/>for clarity + completeness)
+    C --> D{Spec approved<br/> by human?}
+    D -->|No: gaps found| E(Refine spec<br/>address gaps)
     E --> C
-    D -->|Yes| F(Generate tests\nfrom spec)
-    F --> G(Generate implementation\nfrom spec + tests)
+    D -->|Yes| F(Generate tests<br/>from spec)
+    F --> G(Generate implementation<br/>from spec + tests)
     G --> H(Run test suite)
-    H --> I{All tests\npass?}
-    I -->|No| J(Claude fixes\nimplementation)
+    H --> I{All tests<br/>pass?}
+    I -->|No| J(Claude fixes<br/>implementation)
     J --> H
-    I -->|Yes| K(Human review\nspec vs output)
-    K --> L{Matches\nspec?}
-    L -->|No| M(Update spec\nor implementation)
+    I -->|Yes| K(Human review<br/>spec vs output)
+    K --> L{Matches<br/>spec?}
+    L -->|No| M(Update spec<br/>or implementation)
     M --> K
     L -->|Yes| N([Merge ✓])
 
@@ -134,21 +134,21 @@ Complex tasks benefit from plan mode: Claude explores the codebase, proposes a p
 
 ```mermaid
 flowchart TD
-    A([Complex task given]) --> B(Enter Plan Mode\nShift+Tab × 2)
-    B --> C(Claude explores\ncodebase structure)
-    C --> D(Claude proposes plan\nwith file list)
+    A([Complex task given]) --> B(Enter Plan Mode<br/>Shift+Tab × 2)
+    B --> C(Claude explores<br/>codebase structure)
+    C --> D(Claude proposes plan<br/>with file list)
     D --> E(Human reviews plan)
-    E --> F{Plan\nacceptable?}
-    F -->|No: issues found| G(Human annotates plan\nmarks corrections)
+    E --> F{Plan<br/>acceptable?}
+    F -->|No: issues found| G(Human annotates plan<br/>marks corrections)
     G --> H(Claude revises plan)
     H --> E
-    F -->|Yes| I(Approve plan\nExit Plan Mode)
-    I --> J(Claude executes\nstep by step)
-    J --> K(Claude reports\nprogress)
-    K --> L{Unexpected\nissue?}
-    L -->|Yes| M(Claude flags issue\nasks for guidance)
+    F -->|Yes| I(Approve plan<br/>Exit Plan Mode)
+    I --> J(Claude executes<br/>step by step)
+    J --> K(Claude reports<br/>progress)
+    K --> L{Unexpected<br/>issue?}
+    L -->|Yes| M(Claude flags issue<br/>asks for guidance)
     M --> F
-    L -->|No| N{All steps\ncomplete?}
+    L -->|No| N{All steps<br/>complete?}
     N -->|No| J
     N -->|Yes| O([Task done ✓])
 
@@ -200,9 +200,9 @@ Output rarely hits the mark on the first try. This loop gives you a systematic w
 flowchart TD
     A([Initial prompt]) --> B(Claude generates output)
     B --> C(Evaluate output quality)
-    C --> D{Good\nenough?}
+    C --> D{Good<br/>enough?}
     D -->|Yes| E([Done ✓])
-    D -->|No| F(Identify specific issue\nWhat exactly is wrong?)
+    D -->|No| F(Identify specific issue<br/>What exactly is wrong?)
     F --> G{Issue type?}
     G -->|Style/tone| H(Add: style constraints)
     G -->|Missing info| I(Add: provide missing context)
@@ -214,9 +214,9 @@ flowchart TD
     K --> L
     L --> M(Claude refines output)
     M --> N(Compare before/after)
-    N --> O{Improvement\ndetected?}
+    N --> O{Improvement<br/>detected?}
     O -->|Yes| C
-    O -->|No| P(Different\napproach needed)
+    O -->|No| P(Different<br/>approach needed)
     P --> F
 
     style A fill:#F5E6D3,color:#333

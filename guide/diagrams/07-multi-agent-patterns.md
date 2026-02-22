@@ -17,20 +17,20 @@ Three proven topologies for multi-agent coordination. Choose based on task indep
 ```mermaid
 flowchart TD
     subgraph ORCH["Pattern 1: Orchestrator + Workers"]
-        OL[Lead Orchestrator] --> OW1[Worker 1\nFrontend]
-        OL --> OW2[Worker 2\nBackend]
-        OL --> OW3[Worker 3\nTests]
+        OL[Lead Orchestrator] --> OW1[Worker 1<br/>Frontend]
+        OL --> OW2[Worker 2<br/>Backend]
+        OL --> OW3[Worker 3<br/>Tests]
         OW1 & OW2 & OW3 --> OR([Results aggregated])
     end
 
     subgraph PIPE["Pattern 2: Pipeline"]
-        PA[Agent A\nRequirements] --> PB[Agent B\nImplementation]
-        PB --> PC[Agent C\nReview]
+        PA[Agent A<br/>Requirements] --> PB[Agent B<br/>Implementation]
+        PB --> PC[Agent C<br/>Review]
         PC --> PD([Final output])
     end
 
     subgraph ROUTE["Pattern 3: Specialist Router"]
-        RR{Router Agent\nanalyzes task} --> RC[Code Agent]
+        RR{Router Agent<br/>analyzes task} --> RC[Code Agent]
         RR --> RT[Test Agent]
         RR --> RD[Docs Agent]
         RC & RT & RD --> RO([Specialized result])
@@ -79,19 +79,19 @@ Git worktrees enable true parallel development: each Claude instance works in an
 
 ```mermaid
 flowchart LR
-    MB[(Main Branch\ngit repository)] --> WA[git worktree add\nfeature-A]
-    MB --> WB[git worktree add\nfeature-B]
-    MB --> WC[git worktree add\nbugfix-C]
+    MB[(Main Branch<br/>git repository)] --> WA[git worktree add<br/>feature-A]
+    MB --> WB[git worktree add<br/>feature-B]
+    MB --> WC[git worktree add<br/>bugfix-C]
 
-    WA --> CA[Claude Instance 1\n/worktrees/feature-A]
-    WB --> CB[Claude Instance 2\n/worktrees/feature-B]
-    WC --> CC[Claude Instance 3\n/worktrees/bugfix-C]
+    WA --> CA[Claude Instance 1<br/>/worktrees/feature-A]
+    WB --> CB[Claude Instance 2<br/>/worktrees/feature-B]
+    WC --> CC[Claude Instance 3<br/>/worktrees/bugfix-C]
 
     CA --> CA1([Commits to feature-A])
     CB --> CB1([Commits to feature-B])
     CC --> CC1([Commits to bugfix-C])
 
-    CA1 & CB1 & CC1 --> MERGE([Merge to main\nwhen ready])
+    CA1 & CB1 & CC1 --> MERGE([Merge to main<br/>when ready])
 
     style MB fill:#E87E2F,color:#fff
     style CA fill:#6DB3F2,color:#fff
@@ -132,22 +132,22 @@ Separating planning from execution using two Claude instances prevents costly mi
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant PL as Planner Claude\n(no tools)
-    participant EX as Executor Claude\n(full tools)
+    participant PL as Planner Claude<br/>(no tools)
+    participant EX as Executor Claude<br/>(full tools)
 
     U->>PL: "Plan how to refactor auth module"
-    Note over PL: Reads docs, analyzes requirements\nNo execution risk — no tools
+    Note over PL: Reads docs, analyzes requirements<br/>No execution risk — no tools
 
-    PL->>U: Detailed plan:\n1. Files to change\n2. Order of operations\n3. Risk points\n4. Rollback strategy
+    PL->>U: Detailed plan:<br/>1. Files to change<br/>2. Order of operations<br/>3. Risk points<br/>4. Rollback strategy
 
     U->>U: Review plan carefully
-    Note over U: Human checkpoint:\napprove or adjust
+    Note over U: Human checkpoint:<br/>approve or adjust
 
     U->>EX: "Execute this plan: [plan text]"
     EX->>EX: Implements step by step
     EX->>U: Progress updates + results
 
-    Note over PL,EX: Key insight: planner can be\nmore thorough without execution anxiety
+    Note over PL,EX: Key insight: planner can be<br/>more thorough without execution anxiety
 ```
 
 <details>
@@ -181,20 +181,20 @@ When tasks can be parallelized, spawn N Claude instances simultaneously instead 
 
 ```mermaid
 flowchart LR
-    BT([Large Task:\nRefactor 50 files]) --> DEC{Decompose\ninto N subtasks}
+    BT([Large Task:<br/>Refactor 50 files]) --> DEC{Decompose<br/>into N subtasks}
 
-    DEC --> T1["Subtask 1\nFiles 1-10"]
-    DEC --> T2["Subtask 2\nFiles 11-20"]
-    DEC --> T3["Subtask 3\nFiles 21-30"]
-    DEC --> TN["Subtask N\n..."]
+    DEC --> T1["Subtask 1<br/>Files 1-10"]
+    DEC --> T2["Subtask 2<br/>Files 11-20"]
+    DEC --> T3["Subtask 3<br/>Files 21-30"]
+    DEC --> TN["Subtask N<br/>..."]
 
-    T1 --> CI1[Claude\nInstance 1]
-    T2 --> CI2[Claude\nInstance 2]
-    T3 --> CI3[Claude\nInstance 3]
-    TN --> CIN[Claude\nInstance N]
+    T1 --> CI1[Claude<br/>Instance 1]
+    T2 --> CI2[Claude<br/>Instance 2]
+    T3 --> CI3[Claude<br/>Instance 3]
+    TN --> CIN[Claude<br/>Instance N]
 
-    CI1 & CI2 & CI3 & CIN --> AGG(Aggregate\nresults)
-    AGG --> REV([Integration review\n~10x faster than sequential])
+    CI1 & CI2 & CI3 & CIN --> AGG(Aggregate<br/>results)
+    AGG --> REV([Integration review<br/>~10x faster than sequential])
 
     style BT fill:#F5E6D3,color:#333
     style DEC fill:#E87E2F,color:#fff
@@ -236,20 +236,20 @@ Not every task needs multiple instances. This decision tree guides you to the ri
 
 ```mermaid
 flowchart TD
-    A([Task to complete]) --> B{Need multiple\nClaude instances?}
-    B -->|No| C([Single session\nStandard usage])
-    B -->|Yes| D{How many\ninstances?}
+    A([Task to complete]) --> B{Need multiple<br/>Claude instances?}
+    B -->|No| C([Single session<br/>Standard usage])
+    B -->|Yes| D{How many<br/>instances?}
 
-    D -->|2-3| E{Need branch\nisolation?}
-    E -->|Yes| F([Git worktrees\nSeparate branches])
-    E -->|No| G([Multiple terminals\nSame repo])
+    D -->|2-3| E{Need branch<br/>isolation?}
+    E -->|Yes| F([Git worktrees<br/>Separate branches])
+    E -->|No| G([Multiple terminals<br/>Same repo])
 
     D -->|4+| H{Task structure?}
-    H -->|Independent tasks| I([Task tool\nSub-agents in parallel])
-    H -->|Sequential pipeline| J([Agent pipeline\nA → B → C])
-    H -->|Mixed expertise| K([Specialist router\nRoute by task type])
+    H -->|Independent tasks| I([Task tool<br/>Sub-agents in parallel])
+    H -->|Sequential pipeline| J([Agent pipeline<br/>A → B → C])
+    H -->|Mixed expertise| K([Specialist router<br/>Route by task type])
 
-    B2{Need planning\nseparation?} --> L([Dual-instance\nPlanner + Executor])
+    B2{Need planning<br/>separation?} --> L([Dual-instance<br/>Planner + Executor])
 
     style A fill:#F5E6D3,color:#333
     style B fill:#E87E2F,color:#fff

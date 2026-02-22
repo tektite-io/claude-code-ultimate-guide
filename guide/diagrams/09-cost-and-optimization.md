@@ -18,17 +18,17 @@ Not all tasks need the most powerful model. Using the right model for the right 
 flowchart TD
     A([Task to complete]) --> B{Task complexity?}
 
-    B -->|Simple| C["Simple tasks:\ntypo fixes, renames,\nformatting, translations"]
-    C --> D([Haiku 4.5\n💰 Cheapest, fastest\n~$0.80/MTok input])
+    B -->|Simple| C["Simple tasks:<br/>typo fixes, renames,<br/>formatting, translations"]
+    C --> D([Haiku 4.5<br/>💰 Cheapest, fastest<br/>~$0.80/MTok input])
 
-    B -->|Standard| E["Standard tasks:\nfeature implementation,\nbug fixes, refactoring"]
-    E --> F([Sonnet 4.5/4.6\n💰💰 Balanced\n~$3/MTok input])
+    B -->|Standard| E["Standard tasks:<br/>feature implementation,<br/>bug fixes, refactoring"]
+    E --> F([Sonnet 4.5/4.6<br/>💰💰 Balanced<br/>~$3/MTok input])
 
-    B -->|Complex| G{Needs deep\nreasoning?}
-    G -->|Yes| H["Complex tasks:\narchitecture decisions,\nsecurity review,\nmulti-file analysis"]
-    H --> I([Opus 4.6 / Sonnet + --think-hard\n💰💰💰 Most capable\n~$15/MTok input])
+    B -->|Complex| G{Needs deep<br/>reasoning?}
+    G -->|Yes| H["Complex tasks:<br/>architecture decisions,<br/>security review,<br/>multi-file analysis"]
+    H --> I([Opus 4.6 / Sonnet + --think-hard<br/>💰💰💰 Most capable<br/>~$15/MTok input])
 
-    G -->|No: just large| J["Large but clear tasks:\nbig refactors,\ndoc generation"]
+    G -->|No: just large| J["Large but clear tasks:<br/>big refactors,<br/>doc generation"]
     J --> F
 
     style A fill:#F5E6D3,color:#333
@@ -67,27 +67,27 @@ High token costs are usually fixable. This systematic tree identifies the root c
 
 ```mermaid
 flowchart TD
-    A([High token costs?]) --> B{Context\ntoo large?}
-    B -->|Yes| C(Use /compact\nor start fresh session)
-    C --> Z([Saves 40-60%\nper session])
+    A([High token costs?]) --> B{Context<br/>too large?}
+    B -->|Yes| C(Use /compact<br/>or start fresh session)
+    C --> Z([Saves 40-60%<br/>per session])
 
-    B -->|No| D{Verbose\nresponses?}
-    D -->|Yes| E(Add CLAUDE.md instruction:\n'Be concise, avoid explanations')
+    B -->|No| D{Verbose<br/>responses?}
+    D -->|Yes| E(Add CLAUDE.md instruction:<br/>'Be concise, avoid explanations')
     E --> Z2([Saves 20-30%])
 
-    D -->|No| F{Re-explaining\ncontext repeatedly?}
-    F -->|Yes| G(Move repeated context\nto CLAUDE.md)
+    D -->|No| F{Re-explaining<br/>context repeatedly?}
+    F -->|Yes| G(Move repeated context<br/>to CLAUDE.md)
     G --> Z3([Saves 15-25%])
 
-    F -->|No| H{Using wrong\nmodel for task?}
-    H -->|Yes| I(Use Haiku for simple tasks\nSee model selection tree)
-    I --> Z4([Saves 50-90%\non simple tasks])
+    F -->|No| H{Using wrong<br/>model for task?}
+    H -->|Yes| I(Use Haiku for simple tasks<br/>See model selection tree)
+    I --> Z4([Saves 50-90%<br/>on simple tasks])
 
-    H -->|No| J{MCP server\nnoisy output?}
-    J -->|Yes| K(Review MCP verbosity\nFilter tool output)
+    H -->|No| J{MCP server<br/>noisy output?}
+    J -->|Yes| K(Review MCP verbosity<br/>Filter tool output)
     K --> Z5([Saves 10-20%])
 
-    J -->|No| L([Baseline cost\nacceptable])
+    J -->|No| L([Baseline cost<br/>acceptable])
 
     style A fill:#F5E6D3,color:#333
     style B fill:#E87E2F,color:#fff
@@ -137,9 +137,9 @@ flowchart LR
 
     subgraph PRO["Pro ($20/mo)"]
         P1[Claude Code CLI ✓]
-        P2[Limited usage\n~1x baseline]
+        P2[Limited usage<br/>~1x baseline]
         P3[Personal projects]
-        P4[❌ No parallel sessions\nout of the box]
+        P4[❌ No parallel sessions<br/>out of the box]
     end
 
     subgraph MAX["Max ($100-200/mo)"]
@@ -196,39 +196,39 @@ Multiple strategies stack for cumulative token savings. Apply them in order from
 
 ```mermaid
 flowchart LR
-    BASE([Baseline:\n100% tokens]) --> RTK
+    BASE([Baseline:<br/>100% tokens]) --> RTK
 
     subgraph RTK["Strategy 1: RTK Proxy"]
-        R1[Raw CLI output\n→ filtered output]
-        R2["git status, cargo test,\npnpm list → compressed"]
-        R3[Saves 60-90%\non CLI commands]
+        R1[Raw CLI output<br/>→ filtered output]
+        R2["git status, cargo test,<br/>pnpm list → compressed"]
+        R3[Saves 60-90%<br/>on CLI commands]
     end
 
     RTK --> COMP
 
     subgraph COMP["Strategy 2: /compact"]
-        C1[Long conversation\n→ summarized]
-        C2[Keep decisions,\ndrop verbose reasoning]
-        C3[Saves 40-60%\nat checkpoint]
+        C1[Long conversation<br/>→ summarized]
+        C2[Keep decisions,<br/>drop verbose reasoning]
+        C3[Saves 40-60%<br/>at checkpoint]
     end
 
     COMP --> CLAUDE_MD
 
     subgraph CLAUDE_MD["Strategy 3: CLAUDE.md"]
-        CM1[Repeated context\n→ persistent instructions]
-        CM2[No re-explaining\nproject conventions]
-        CM3[Saves 15-25%\nper session]
+        CM1[Repeated context<br/>→ persistent instructions]
+        CM2[No re-explaining<br/>project conventions]
+        CM3[Saves 15-25%<br/>per session]
     end
 
     CLAUDE_MD --> MODEL
 
     subgraph MODEL["Strategy 4: Model Selection"]
-        MO1[Haiku for simple tasks\ninstead of Sonnet]
-        MO2[Same quality output\nat fraction of cost]
-        MO3[Saves 50-90%\non simple tasks]
+        MO1[Haiku for simple tasks<br/>instead of Sonnet]
+        MO2[Same quality output<br/>at fraction of cost]
+        MO3[Saves 50-90%<br/>on simple tasks]
     end
 
-    MODEL --> RESULT([Optimized:\n10-20% of baseline\nfor typical usage])
+    MODEL --> RESULT([Optimized:<br/>10-20% of baseline<br/>for typical usage])
 
     style BASE fill:#E85D5D,color:#fff
     style R3 fill:#7BC47F,color:#333

@@ -18,23 +18,23 @@ Different backgrounds require different onboarding approaches. Forcing developer
 flowchart TD
     A([Start: New to Claude Code]) --> B{Your background?}
 
-    B -->|Developer| C["🧑‍💻 Developer Path\n~2 days to productivity"]
+    B -->|Developer| C["🧑‍💻 Developer Path<br/>~2 days to productivity"]
     C --> C1(Quick Start: first session)
     C1 --> C2(Workflows: TDD, spec-first, plan-driven)
     C2 --> C3(Advanced: agents, hooks, MCP servers)
     C3 --> C4([Productive developer ✓])
 
-    B -->|Non-technical| D["👤 Non-Tech Path\n~1 week to basic usage"]
-    D --> D1(What is Claude Code?\nKey concepts only)
-    D1 --> D2(Basic usage: editing,\nexplaining, simple tasks)
-    D2 --> D3(Limited scope: no\nproduction deployments)
+    B -->|Non-technical| D["👤 Non-Tech Path<br/>~1 week to basic usage"]
+    D --> D1(What is Claude Code?<br/>Key concepts only)
+    D1 --> D2(Basic usage: editing,<br/>explaining, simple tasks)
+    D2 --> D3(Limited scope: no<br/>production deployments)
     D3 --> D4([Safe basic user ✓])
 
-    B -->|Team lead| E["👔 Team Lead Path\n~2 weeks to team adoption"]
-    E --> E1(ROI assessment\nvalue vs cost analysis)
-    E1 --> E2(CLAUDE.md strategy\nteam conventions)
-    E2 --> E3(Pilot with 2-3 devs\ncollect feedback)
-    E3 --> E4(Gradual rollout\nwith guardrails)
+    B -->|Team lead| E["👔 Team Lead Path<br/>~2 weeks to team adoption"]
+    E --> E1(ROI assessment<br/>value vs cost analysis)
+    E1 --> E2(CLAUDE.md strategy<br/>team conventions)
+    E2 --> E3(Pilot with 2-3 devs<br/>collect feedback)
+    E3 --> E4(Gradual rollout<br/>with guardrails)
     E4 --> E5([Team adoption ✓])
 
     style A fill:#F5E6D3,color:#333
@@ -74,18 +74,18 @@ The UVAL protocol prevents the "copy-paste trap" — where you use Claude Code w
 
 ```mermaid
 flowchart LR
-    U([U — Use It\nTry the feature\nyourself first]) --> V
+    U([U — Use It<br/>Try the feature<br/>yourself first]) --> V
 
-    V([V — Verify\nUnderstand what\nClaude did and why]) --> A
+    V([V — Verify<br/>Understand what<br/>Claude did and why]) --> A
 
-    A([A — Adapt\nModify the approach,\nexperiment with variants]) --> L
+    A([A — Adapt<br/>Modify the approach,<br/>experiment with variants]) --> L
 
-    L([L — Learn\nNote the pattern\nfor future use]) --> NEXT
+    L([L — Learn<br/>Note the pattern<br/>for future use]) --> NEXT
 
-    NEXT{More tasks\nusing this pattern?} -->|Yes| U
+    NEXT{More tasks<br/>using this pattern?} -->|Yes| U
     NEXT -->|No| DONE([Pattern internalized ✓])
 
-    TRAP["❌ Copy-Paste Trap:\nAccept output →\nDeploy → Bug →\n'Claude broke it'"] -.->|avoid| V
+    TRAP["❌ Copy-Paste Trap:<br/>Accept output →<br/>Deploy → Bug →<br/>'Claude broke it'"] -.->|avoid| V
 
     style U fill:#6DB3F2,color:#fff
     style V fill:#E87E2F,color:#fff
@@ -122,25 +122,25 @@ Knowing when to trust Claude's output and when to verify is the most important s
 
 ```mermaid
 flowchart TD
-    A([Claude produces output]) --> B{Can I test\nthis output?}
+    A([Claude produces output]) --> B{Can I test<br/>this output?}
 
-    B -->|Yes| C{Do the tests\nactually pass?}
+    B -->|Yes| C{Do the tests<br/>actually pass?}
     C -->|Yes| D([Trust with test coverage ✓])
     C -->|No| E([Fix before using])
 
-    B -->|No| F{Do I understand\nwhat it did?}
-    F -->|No| G(Ask Claude to explain\nstep by step)
+    B -->|No| F{Do I understand<br/>what it did?}
+    F -->|No| G(Ask Claude to explain<br/>step by step)
     G --> F
 
-    F -->|Yes| H{Is this\nreversible?}
+    F -->|Yes| H{Is this<br/>reversible?}
     H -->|Yes, easily| I([Trust with git safety net ✓])
-    H -->|No: hard to undo| J(Extra review required\ncheck before applying)
-    J --> K{Is it\nsecurity-critical?}
+    H -->|No: hard to undo| J(Extra review required<br/>check before applying)
+    J --> K{Is it<br/>security-critical?}
 
-    K -->|Yes: auth, crypto, perms| L([Human expert review\nnever trust blindly])
-    K -->|No| M{Familiar\ndomain?}
+    K -->|Yes: auth, crypto, perms| L([Human expert review<br/>never trust blindly])
+    K -->|No| M{Familiar<br/>domain?}
     M -->|Yes| I
-    M -->|No| N([Pair with domain expert\nor verify by testing])
+    M -->|No| N([Pair with domain expert<br/>or verify by testing])
 
     style A fill:#F5E6D3,color:#333
     style B fill:#E87E2F,color:#fff

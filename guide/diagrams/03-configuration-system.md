@@ -16,13 +16,13 @@ Claude Code resolves settings through a strict priority hierarchy. Higher layers
 
 ```mermaid
 flowchart TD
-    A["1️⃣ CLI Flags\n--model, --dangerously-skip-permissions\n--max-turns, --system-prompt"] --> B["2️⃣ Environment Variables\nANTHROPIC_API_KEY\nCLAUDE_MODEL, CLAUDE_CONFIG"]
-    B --> C["3️⃣ Project Config\n.claude/settings.json\n.claude/settings.local.json"]
-    C --> D["4️⃣ Global Config\n~/.claude/settings.json\n~/.claude/CLAUDE.md"]
-    D --> E["5️⃣ Built-in Defaults\nHardcoded in Claude Code binary"]
+    A["1️⃣ CLI Flags<br/>--model, --dangerously-skip-permissions<br/>--max-turns, --system-prompt"] --> B["2️⃣ Environment Variables<br/>ANTHROPIC_API_KEY<br/>CLAUDE_MODEL, CLAUDE_CONFIG"]
+    B --> C["3️⃣ Project Config<br/>.claude/settings.json<br/>.claude/settings.local.json"]
+    C --> D["4️⃣ Global Config<br/>~/.claude/settings.json<br/>~/.claude/CLAUDE.md"]
+    D --> E["5️⃣ Built-in Defaults<br/>Hardcoded in Claude Code binary"]
 
-    A1["Highest priority\nOverrides everything\nUse: automation, CI/CD"] --> A
-    E1["Lowest priority\nFallback values\nUse: baseline behavior"] --> E
+    A1["Highest priority<br/>Overrides everything<br/>Use: automation, CI/CD"] --> A
+    E1["Lowest priority<br/>Fallback values<br/>Use: baseline behavior"] --> E
 
     style A fill:#E87E2F,color:#fff
     style B fill:#6DB3F2,color:#fff
@@ -59,27 +59,27 @@ Three extensibility mechanisms with different purposes and tradeoffs. Choosing t
 ```mermaid
 flowchart LR
     subgraph SKILLS["📦 Skills (.claude/skills/)"]
-        S1[Bundled capability\nwith resources]
+        S1[Bundled capability<br/>with resources]
         S2[Invoked via /skillname]
         S3[Portable across projects]
-        S4["Use for: reusable\ncross-project capabilities"]
+        S4["Use for: reusable<br/>cross-project capabilities"]
     end
 
     subgraph COMMANDS["⚡ Commands (.claude/commands/)"]
-        C1[Simple template\nor script]
+        C1[Simple template<br/>or script]
         C2[Project slash command]
         C3[Project-specific only]
-        C4["Use for: project\nautomation, shortcuts"]
+        C4["Use for: project<br/>automation, shortcuts"]
     end
 
     subgraph AGENTS["🤖 Agents (.claude/agents/)"]
         A1[Full autonomous agent]
         A2[Own tool set & CLAUDE.md]
         A3[Spawned via Task tool]
-        A4["Use for: complex\ndelegated tasks"]
+        A4["Use for: complex<br/>delegated tasks"]
     end
 
-    Q{What are\nyou building?} --> |Reusable feature| SKILLS
+    Q{What are<br/>you building?} --> |Reusable feature| SKILLS
     Q --> |Project shortcut| COMMANDS
     Q --> |Complex sub-task| AGENTS
 
@@ -123,7 +123,7 @@ sequenceDiagram
 
     P->>T: Task(prompt, tools_allowed)
     T->>S: Spawn new Claude instance
-    Note over S: Gets: prompt + tool grants\nDoes NOT get: parent conversation
+    Note over S: Gets: prompt + tool grants<br/>Does NOT get: parent conversation
 
     S->>FS: Read files (if granted)
     S->>FS: Edit files (if granted)
@@ -136,7 +136,7 @@ sequenceDiagram
     T->>P: Result string
     P->>P: Continues with result
 
-    Note over P,T: Parent sees only final text\nNo side-effects leaked back
+    Note over P,T: Parent sees only final text<br/>No side-effects leaked back
 ```
 
 <details>
@@ -168,7 +168,7 @@ Hooks let you run custom code at key points in Claude Code's lifecycle — for s
 flowchart TD
     A([User sends message]) --> B{PreToolUse Hook}
     B -->|Exit 0: allow| C[Tool executes]
-    B -->|Exit 1: block| D([Tool blocked\nClause stops])
+    B -->|Exit 1: block| D([Tool blocked<br/>Clause stops])
     C --> E{PostToolUse Hook}
     E --> F[Next tool or response]
     F --> G{More tool calls?}

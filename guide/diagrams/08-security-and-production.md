@@ -19,22 +19,22 @@ flowchart LR
     THREAT([Threat / Attack]) --> L1
 
     subgraph L1["🛡️ Layer 1: Prevention"]
-        P1[MCP server vetting\nread source before install]
-        P2[CLAUDE.md restrictions\ndefine forbidden actions]
-        P3[.claudeignore\nhide sensitive files]
-        P4[Minimal permissions\nbypassPermissions only in CI]
+        P1[MCP server vetting<br/>read source before install]
+        P2[CLAUDE.md restrictions<br/>define forbidden actions]
+        P3[.claudeignore<br/>hide sensitive files]
+        P4[Minimal permissions<br/>bypassPermissions only in CI]
     end
 
     subgraph L2["🔍 Layer 2: Detection"]
-        D1[PreToolUse hooks\nlog all tool calls]
-        D2[Audit logs\ncomplete history]
-        D3[Anomaly alerts\nunexpected file access]
+        D1[PreToolUse hooks<br/>log all tool calls]
+        D2[Audit logs<br/>complete history]
+        D3[Anomaly alerts<br/>unexpected file access]
     end
 
     subgraph L3["🔒 Layer 3: Response"]
-        R1[Sandbox isolation\nDocker / Firecracker]
-        R2[Permission gates\nhuman approval on risk]
-        R3[Rollback capability\ngit revert, backups]
+        R1[Sandbox isolation<br/>Docker / Firecracker]
+        R2[Permission gates<br/>human approval on risk]
+        R3[Rollback capability<br/>git revert, backups]
     end
 
     L1 -->|Bypassed| L2
@@ -85,23 +85,23 @@ Sandboxing adds overhead. Use this tree to decide when it's mandatory, recommend
 
 ```mermaid
 flowchart TD
-    A([Using Claude Code]) --> B{Running on\nproduction server?}
-    B -->|Yes| C([ALWAYS sandbox\nDocker / Firecracker])
-    B -->|No| D{Executing untrusted\ncode or unknown MCP?}
+    A([Using Claude Code]) --> B{Running on<br/>production server?}
+    B -->|Yes| C([ALWAYS sandbox<br/>Docker / Firecracker])
+    B -->|No| D{Executing untrusted<br/>code or unknown MCP?}
 
     D -->|Yes| E{What platform?}
-    E -->|macOS| F([macOS Sandbox\nbuilt-in, free])
-    E -->|Linux| G([Docker sandbox\nrecommended])
-    E -->|CI/CD| H([Ephemeral container\nbest practice])
+    E -->|macOS| F([macOS Sandbox<br/>built-in, free])
+    E -->|Linux| G([Docker sandbox<br/>recommended])
+    E -->|CI/CD| H([Ephemeral container<br/>best practice])
 
-    D -->|No| I{Personal project\nknown codebase?}
-    I -->|Yes| J{Comfortable with\ndefault permissions?}
-    J -->|Yes| K([Default mode\nsandbox optional])
-    J -->|No| L([acceptEdits mode\nmanual file review])
+    D -->|No| I{Personal project<br/>known codebase?}
+    I -->|Yes| J{Comfortable with<br/>default permissions?}
+    J -->|Yes| K([Default mode<br/>sandbox optional])
+    J -->|No| L([acceptEdits mode<br/>manual file review])
 
-    I -->|No / Unsure| M([Sandbox recommended\nerr on side of caution])
+    I -->|No / Unsure| M([Sandbox recommended<br/>err on side of caution])
 
-    NOTE["Rule of thumb:\nIf in doubt → sandbox it\nCost: low. Risk without it: high."] --> A
+    NOTE["Rule of thumb:<br/>If in doubt → sandbox it<br/>Cost: low. Risk without it: high."] --> A
 
     style C fill:#E85D5D,color:#fff
     style F fill:#7BC47F,color:#333
@@ -146,10 +146,10 @@ Asking Claude to verify its own work is circular. The same model that produced t
 ```mermaid
 flowchart TD
     subgraph BAD["❌ Anti-Pattern: Circular Verification"]
-        BA([Claude writes code]) --> BB(Ask Claude:\n'Is this correct?')
-        BB --> BC{Claude says:\n'Yes, looks good!'}
+        BA([Claude writes code]) --> BB(Ask Claude:<br/>'Is this correct?')
+        BB --> BC{Claude says:<br/>'Yes, looks good!'}
         BC -->|Deploy| BD([Bug in production])
-        BC --> BE["Why it fails:\nSame model\nSame training biases\nSame blind spots"]
+        BC --> BE["Why it fails:<br/>Same model<br/>Same training biases<br/>Same blind spots"]
         style BA fill:#E85D5D,color:#fff
         style BD fill:#E85D5D,color:#fff
         style BE fill:#E85D5D,color:#fff
@@ -157,10 +157,10 @@ flowchart TD
     end
 
     subgraph GOOD["✅ Best Practice: Independent Verification"]
-        GA([Claude writes code]) --> GB(Human reviews\ncritical sections)
-        GA --> GC(Automated test suite\nruns independently)
-        GA --> GD(Different tool validates\nSemgrep, ESLint, etc.)
-        GB & GC & GD --> GE{All checks\npass?}
+        GA([Claude writes code]) --> GB(Human reviews<br/>critical sections)
+        GA --> GC(Automated test suite<br/>runs independently)
+        GA --> GD(Different tool validates<br/>Semgrep, ESLint, etc.)
+        GB & GC & GD --> GE{All checks<br/>pass?}
         GE -->|Yes| GF([Safe to deploy])
         GE -->|No| GG([Fix before deploy])
         style GA fill:#7BC47F,color:#333
@@ -198,21 +198,21 @@ Claude Code can run in non-interactive mode inside CI/CD pipelines for automated
 
 ```mermaid
 flowchart LR
-    PR([PR Created]) --> GH{GitHub Actions\ntrigger}
-    GH --> ENV[Set up environment\nANTHROPIC_API_KEY secret]
-    ENV --> CC[claude --print --headless\n'Run quality checks']
+    PR([PR Created]) --> GH{GitHub Actions<br/>trigger}
+    GH --> ENV[Set up environment<br/>ANTHROPIC_API_KEY secret]
+    ENV --> CC[claude --print --headless<br/>'Run quality checks']
 
     CC --> subgraph TASKS["Parallel Checks"]
-        T1[Lint check\nESLint / Prettier]
-        T2[Test suite\nVitest / Jest]
-        T3[Security scan\nSemgrep MCP]
-        T4[Doc completeness\ncheck exports]
+        T1[Lint check<br/>ESLint / Prettier]
+        T2[Test suite<br/>Vitest / Jest]
+        T3[Security scan<br/>Semgrep MCP]
+        T4[Doc completeness<br/>check exports]
     end
 
-    T1 & T2 & T3 & T4 --> AGG{All\nchecks pass?}
-    AGG -->|Yes| OK([✓ Checks green\nhuman review next])
-    AGG -->|No| FAIL([✗ Report failures\non PR])
-    FAIL --> FIX([Developer fixes\nre-trigger CI])
+    T1 & T2 & T3 & T4 --> AGG{All<br/>checks pass?}
+    AGG -->|Yes| OK([✓ Checks green<br/>human review next])
+    AGG -->|No| FAIL([✗ Report failures<br/>on PR])
+    FAIL --> FIX([Developer fixes<br/>re-trigger CI])
     FIX --> CC
 
     style PR fill:#F5E6D3,color:#333

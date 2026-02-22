@@ -17,27 +17,27 @@ Your context window has 4 distinct zones, each requiring different strategies. K
 ```mermaid
 flowchart LR
     subgraph GREEN["🟢 0–50% — Comfortable"]
-        G1(Full capabilities\navailable)
+        G1(Full capabilities<br/>available)
         G2(All tools active)
         G3(Rich responses)
     end
 
     subgraph BLUE["🔵 50–75% — Normal"]
         B1(Monitor usage)
-        B2(Consider /compact\nfor old threads)
+        B2(Consider /compact<br/>for old threads)
         B3(Normal operation)
     end
 
     subgraph ORANGE["🟠 75–85% — Caution"]
-        O1(Suggest /compact\nproactively)
+        O1(Suggest /compact<br/>proactively)
         O2(Reduce verbosity)
-        O3(Defer non-critical\noperations)
+        O3(Defer non-critical<br/>operations)
     end
 
     subgraph RED["🔴 85–100% — Critical"]
-        R1(Auto-compact\ntriggered at 80%)
+        R1(Auto-compact<br/>triggered at 80%)
         R2(Essential ops only)
-        R3(Start new session\nfor new tasks)
+        R3(Start new session<br/>for new tasks)
     end
 
     GREEN --> BLUE --> ORANGE --> RED
@@ -80,16 +80,16 @@ Claude Code has 5 distinct memory types with different scopes and persistence. K
 
 ```mermaid
 flowchart TD
-    A["🌍 Global CLAUDE.md\n~/.claude/CLAUDE.md"] --> B["📁 Project CLAUDE.md\n/project-root/CLAUDE.md"]
-    B --> C["📂 Subdirectory CLAUDE.md\n/src/CLAUDE.md, /tests/CLAUDE.md"]
-    C --> D["💬 In-Conversation Context\nMessages + tool results this session"]
-    D --> E["⚡ Ephemeral State\nMCP server state, tool cache"]
+    A["🌍 Global CLAUDE.md<br/>~/.claude/CLAUDE.md"] --> B["📁 Project CLAUDE.md<br/>/project-root/CLAUDE.md"]
+    B --> C["📂 Subdirectory CLAUDE.md<br/>/src/CLAUDE.md, /tests/CLAUDE.md"]
+    C --> D["💬 In-Conversation Context<br/>Messages + tool results this session"]
+    D --> E["⚡ Ephemeral State<br/>MCP server state, tool cache"]
 
-    A1["Scope: ALL projects\nPersists: Always\nUse: Global prefs, API keys"] --> A
-    B1["Scope: This project\nPersists: Always\nUse: Project conventions"] --> B
-    C1["Scope: This directory\nPersists: Always\nUse: Module-specific rules"] --> C
-    D1["Scope: This session\nPersists: Session only\nUse: Task context"] --> D
-    E1["Scope: This session\nPersists: Session only\nUse: Computed results"] --> E
+    A1["Scope: ALL projects<br/>Persists: Always<br/>Use: Global prefs, API keys"] --> A
+    B1["Scope: This project<br/>Persists: Always<br/>Use: Project conventions"] --> B
+    C1["Scope: This directory<br/>Persists: Always<br/>Use: Module-specific rules"] --> C
+    D1["Scope: This session<br/>Persists: Session only<br/>Use: Task context"] --> D
+    E1["Scope: This session<br/>Persists: Session only<br/>Use: Computed results"] --> E
 
     style A fill:#E87E2F,color:#fff
     style B fill:#6DB3F2,color:#fff
@@ -148,7 +148,7 @@ sequenceDiagram
     CM->>NI: Injects: saved context
     NI->>U: Ready — context restored ✓
 
-    Note over CC,NI: Conversation history NOT restored\nOnly CLAUDE.md content persists
+    Note over CC,NI: Conversation history NOT restored<br/>Only CLAUDE.md content persists
 ```
 
 <details>
@@ -181,9 +181,9 @@ flowchart TD
         B1([Start big session]) --> B2(Add task A)
         B2 --> B3(Add task B)
         B3 --> B4(Add task C)
-        B4 --> B5{Context bloated\n>75%}
-        B5 --> B6(Response quality\ndegrades)
-        B6 --> B7(Force-restart\nloses all context)
+        B4 --> B5{Context bloated<br/>>75%}
+        B5 --> B6(Response quality<br/>degrades)
+        B6 --> B7(Force-restart<br/>loses all context)
         style B1 fill:#E85D5D,color:#fff
         style B5 fill:#E85D5D,color:#fff
         style B6 fill:#E85D5D,color:#fff
@@ -192,7 +192,7 @@ flowchart TD
 
     subgraph GOOD["✅ Best Practice: Focused Sessions"]
         G1([Start focused session]) --> G2(Complete task A)
-        G2 --> G3{Natural\ncheckpoint?}
+        G2 --> G3{Natural<br/>checkpoint?}
         G3 -->|Yes| G4(Save to CLAUDE.md)
         G4 --> G5([New session for task B])
         G3 -->|No| G6{Context >75%?}

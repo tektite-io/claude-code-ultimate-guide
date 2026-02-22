@@ -23,10 +23,10 @@ flowchart TD
     E --> F{{Claude API}}
     F --> G([Claude Response])
 
-    B1[CLAUDE.md files\nglobal + project + subdir] --> B
-    C1[Working directory\nGit status\nProject files] --> C
-    D1[Glob, Grep, Read,\nBash, Task, MCP tools] --> D
-    E1[Previous messages\n+ tool results] --> E
+    B1[CLAUDE.md files<br/>global + project + subdir] --> B
+    C1[Working directory<br/>Git status<br/>Project files] --> C
+    D1[Glob, Grep, Read,<br/>Bash, Task, MCP tools] --> D
+    E1[Previous messages<br/>+ tool results] --> E
 
     style A fill:#F5E6D3,color:#333
     style B fill:#6DB3F2,color:#fff
@@ -78,7 +78,7 @@ flowchart LR
     B --> C(Load Context)
     C --> D(Plan Actions)
     D --> E(Execute Tools)
-    E --> F{More tools\nneeded?}
+    E --> F{More tools<br/>needed?}
     F -->|Yes| G(Collect Results)
     G --> E
     F -->|No| H(Update Context)
@@ -125,17 +125,17 @@ Not every task needs Claude Code. This decision tree helps you route the right t
 
 ```mermaid
 flowchart TD
-    A([Start: I have a task]) --> B{Involves\ncodebase?}
-    B -->|No| C{Pure writing\nor analysis?}
-    B -->|Yes| D{Repetitive or\n>30 min manual?}
+    A([Start: I have a task]) --> B{Involves<br/>codebase?}
+    B -->|No| C{Pure writing<br/>or analysis?}
+    B -->|Yes| D{Repetitive or<br/>>30 min manual?}
 
-    C -->|Yes| E([Use Claude.ai\nor API])
-    C -->|No| F([Clipboard +\nClaude.ai])
+    C -->|Yes| E([Use Claude.ai<br/>or API])
+    C -->|No| F([Clipboard +<br/>Claude.ai])
 
-    D -->|No| G{Single file,\nsimple change?}
-    D -->|Yes| H([Claude Code\n✓ Best choice])
+    D -->|No| G{Single file,<br/>simple change?}
+    D -->|Yes| H([Claude Code<br/>✓ Best choice])
 
-    G -->|Yes| I{Need file\naccess?}
+    G -->|Yes| I{Need file<br/>access?}
     G -->|No| H
 
     I -->|No| F
@@ -195,7 +195,7 @@ flowchart TD
 
     subgraph BYPASS["⚠️ bypassPermissions Mode"]
         B1(ALL operations) --> B2([Auto-approved])
-        B3["Use only in:\nCI/CD, sandboxed\nenvironments"] --> B2
+        B3["Use only in:<br/>CI/CD, sandboxed<br/>environments"] --> B2
     end
 
     style D2 fill:#7BC47F,color:#333
