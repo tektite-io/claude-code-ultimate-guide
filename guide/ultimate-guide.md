@@ -2347,6 +2347,9 @@ You: Let's plan this feature before implementing
 | Fixing a typo | ❌ No |
 | Quick edit to known file | ❌ No |
 
+> **Recommended frequency**: Boris Cherny (Head of Claude Code at Anthropic) starts approximately **80% of tasks in Plan Mode** — letting Claude plan before writing a single line of code. Once the plan is approved, execution is almost always correct on the first try.
+> — *Lenny's Newsletter, February 19, 2026*
+
 ### Exiting Plan Mode
 
 ```
@@ -4279,6 +4282,18 @@ Month 3: 50 rules → 50 mistakes prevented + faster onboarding
 
 **Anti-pattern**: Preemptively documenting everything. Instead, treat CLAUDE.md as a **living document** that grows through actual mistakes caught during development.
 
+### Build for the Model 6 Months Out
+
+> **"Don't design your workflows around the limitations of today's model. Build for where the technology will be in six months."**
+> — Boris Cherny, Head of Claude Code, Lenny's Newsletter (February 19, 2026)
+
+The corollary: every investment you make today in CLAUDE.md, skills, hooks, and workflows compounds *harder* as the models improve. If you optimize purely for current limitations, you'll be constantly rewriting your setup. If you build for a slightly more capable model, your workflows will run automatically when the next version drops.
+
+**Practical implications**:
+- Write CLAUDE.md rules as if Claude will understand nuance better — don't over-specify constraints that will be unnecessary with the next model
+- Build agents for goals, not for step-by-step procedures (models get better at navigation, not just execution)
+- Invest in your prompt patterns and slash commands now — they age well
+
 ### Continuous Context Update
 
 Beyond reactive error capture, **proactively document discoveries** during development sessions. Every insight Claude surfaces about your codebase is a potential CLAUDE.md entry.
@@ -5473,6 +5488,25 @@ When multiple developers use Claude Code on the same codebase, hidden AI generat
 - Not a blame mechanism
 
 > **Anti-pattern**: Skipping disclosure to move faster. The hidden cost is reviewers approving code nobody understands, compounding over months into sections of the codebase that are opaque to the whole team.
+
+### Boris Cherny's 3 Principles for AI Teams
+
+> These are the principles Boris Cherny (Head of Claude Code at Anthropic) shares with every new team member.
+> — *Lenny's Newsletter, February 19, 2026*
+
+**1. Underfund projects on purpose**
+
+Having one great engineer on a big problem — instead of a full team — forces deep AI utilization. The constraint accelerates shipping, not slows it. The bottleneck shifts from headcount to quality of prompts and workflows.
+
+**2. Give engineers unlimited tokens first**
+
+Don't optimize token costs early. Give engineers the freedom to experiment maximally. Crazy, innovative patterns only emerge when nobody is watching the meter. Optimize costs *after* a successful idea has proven its value and needs to scale.
+
+**3. Encourage people to go faster**
+
+The default instinct with AI tools is caution — reviewing every output, second-guessing every suggestion. The better instinct: ship, validate, iterate. Claude Code is designed for high-velocity cycles, not careful deliberation.
+
+> **When to apply**: Teams of 2+ using Claude Code professionally. Solo developers should focus on the first two principles (underfund = treat yourself as a one-person team with AI leverage; unlimited tokens = don't self-censor your experiments).
 
 ---
 

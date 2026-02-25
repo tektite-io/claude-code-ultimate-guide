@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- **Boris Cherny / Lenny's Newsletter integration** — 3 insights from Head of Claude Code interview (Feb 19, 2026, Lenny's Newsletter)
+  - `guide/ultimate-guide.md` l. 2350 — Ratio empirique "80% Plan Mode" : Boris Cherny démarre ~80% de ses tâches en Plan Mode, blockquote dans la table "When to Use Plan Mode"
+  - `guide/ultimate-guide.md` l. 4285 — Nouvelle section "Build for the Model 6 Months Out" dans CLAUDE.md compounding memory : principe stratégique pour concevoir ses workflows en anticipant les modèles futurs
+  - `guide/ultimate-guide.md` l. 5492 — Nouvelle section "Boris Cherny's 3 Principles for AI Teams" (fin de §3.5) : underfund projects, unlimited tokens first, go faster — management advice vérifiée Business Insider
+  - `docs/resource-evaluations/2026-02-25-boris-cherny-lenny-newsletter-podcast.md` — Évaluation complète (4/5, challenge technical-writer, fact-check Perplexity)
+
 - **Remote Control (Mobile Access) — Section 9.22** — New section in `guide/ultimate-guide.md` documenting the Remote Control feature (Research Preview, v2.1.51+, Pro/Max only)
   - Two activation modes: `claude remote-control` CLI subcommand and `/rc` slash command
   - QR code + session URL connection workflow, `/mobile` command for app download
