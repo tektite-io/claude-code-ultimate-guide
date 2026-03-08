@@ -858,9 +858,13 @@ Claude: [Resumes with Serena's persistent project understanding]
 
 ### Session Auto-Rename
 
-When running multiple Claude Code sessions in parallel (split terminals, WebStorm tabs, parallel workstreams), the `/resume` picker shows sessions by timestamp or truncated first prompt — impossible to distinguish.
+When running multiple Claude Code sessions in parallel (split terminals, WebStorm tabs, parallel workstreams), the `/resume` picker shows sessions by timestamp or truncated first prompt — impossible to distinguish at a glance.
 
-**Solution**: A behavioral instruction in `~/.claude/CLAUDE.md` that makes Claude rename sessions automatically after 2-3 exchanges, with no tooling required.
+Two complementary approaches solve this. Use one or both together.
+
+#### Approach A: CLAUDE.md behavioral instruction (mid-session)
+
+A behavioral instruction in `~/.claude/CLAUDE.md` makes Claude call `/rename` automatically after 2-3 exchanges. No tooling required, works across all IDEs and terminals.
 
 ```markdown
 # Session Naming (auto-rename)
@@ -887,13 +891,45 @@ When running multiple Claude Code sessions in parallel (split terminals, WebStor
 - Do NOT ask for confirmation on early rename (just do it)
 ```
 
-**Why not a hook?** The `Stop` event hook has no access to conversation context — it can't infer a meaningful title. The behavioral instruction approach costs zero tooling and works across all IDEs and terminals.
+This works well during active sessions but depends on Claude following the instruction consistently.
 
-**Limitation**: Terminal tab names (WebStorm, iTerm2) are not affected. JetBrains filters ANSI escape sequences. The Claude session is renamed, not the OS tab.
+#### Approach B: SessionEnd hook (automatic, AI-generated)
 
-After a session, the `/resume` picker shows `"fix auth middleware"` instead of `"2026-03-04T14:23..."`.
+A `SessionEnd` hook reads the session's JSONL file directly from `~/.claude/projects/`, extracts the first few user messages as context, and calls `claude -p --model claude-haiku-4-5-20251001` to generate a 4-6 word descriptive title. If Haiku is unavailable, it falls back to a sanitized version of the first message.
+
+The hook updates both `sessions-index.jsonl` (for custom session browsers) and the slug field in the JSONL file (for native `/resume` compatibility).
+
+```json
+// .claude/settings.json
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/auto-rename-session.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Requirements: `claude` CLI on PATH, `python3` for JSON parsing. Set `SESSION_AUTORENAME=0` to disable for a specific session.
+
+After the session ends, the `/resume` picker shows `"fix auth middleware"` instead of `"2026-03-04T14:23..."`.
+
+#### Using both together
+
+The two approaches handle different moments in a session's lifecycle. Approach A renames early so the session is identifiable while it's still running. Approach B renames at the end with a title that reflects the full session scope, potentially overwriting the mid-session name with something more accurate.
+
+**Limitation (both approaches)**: Terminal tab names in WebStorm and iTerm2 are not affected. JetBrains filters ANSI escape sequences. The Claude session is renamed, not the OS tab.
 
 > See full template: [examples/claude-md/session-naming.md](../examples/claude-md/session-naming.md)
+> See hook template: [examples/hooks/bash/auto-rename-session.sh](../examples/hooks/bash/auto-rename-session.sh)
 
 ## 1.4 Permission Modes
 

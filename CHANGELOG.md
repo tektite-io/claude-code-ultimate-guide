@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [3.32.1] - 2026-03-08
+
+### Added
+
+- **`auto-rename-session.sh` hook template** (`examples/hooks/bash/auto-rename-session.sh`) — hook SessionEnd qui génère automatiquement un titre descriptif pour chaque session. Lit le JSONL de session directement, extrait les 3 premiers messages utilisateur, appelle `claude -p --model claude-haiku-4-5-20251001` pour générer un titre 4-6 mots (format `verb + subject`), fallback sur le premier message nettoyé si Haiku indisponible. Met à jour le slug dans le JSONL natif (pour `/resume`) et dans `sessions-index.jsonl`. Output via `/dev/tty` pour bypasser le parsing JSON de Claude Code.
+
+### Documentation
+
+- **Section "Session Auto-Rename" mise à jour** (`guide/ultimate-guide.md`) — présente désormais deux approches complémentaires : Approche A (instruction CLAUDE.md, renommage mid-session via `/rename`, zéro tooling) et Approche B (hook SessionEnd, titre généré par Haiku en post-session, lecture directe du JSONL). Suppression du paragraphe "Why not a hook?" qui était incorrect depuis l'introduction de l'accès aux données de session via JSONL.
+
 ## [3.32.0] - 2026-03-06
 
 ### Added
