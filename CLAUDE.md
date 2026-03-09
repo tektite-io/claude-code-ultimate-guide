@@ -107,6 +107,27 @@ cd whitepapers && ./render-epub.sh en   # English only
 
 **Skill disponible** : `/pdf-generator` pour aide contextuelle (template YAML, stack, dépannage).
 
+### Recap Cards (Fiches Mémo Thématiques)
+
+Fiches A4 1-page imprimables, format intermédiaire entre cheatsheet et whitepapers.
+
+```bash
+# Single card
+cd whitepapers/recap-cards/fr && quarto render 01-commandes-essentielles.qmd --to recap-card-typst
+
+# All FR cards (via script)
+cd whitepapers/recap-cards && ./render-recap-cards.sh fr
+
+# All cards (FR + EN)
+cd whitepapers/recap-cards && ./render-recap-cards.sh all
+```
+
+**Stack** : Extension `recap-card` (`whitepapers/_extensions/recap-card/`). Format `recap-card-typst`. Même palette Bold Guy.
+
+**Source des fiches** : `whitepapers/recap-cards/fr/*.qmd` (FR), `whitepapers/recap-cards/en/*.qmd` (EN à venir).
+
+**25 fiches planifiées** — 5 prototypes Phase 1-2 livrés : 01, 03, 04, 06, 25.
+
 ### Before Committing
 ```bash
 # Verify versions are synchronized

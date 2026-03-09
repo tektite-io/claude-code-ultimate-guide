@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [3.32.2] - 2026-03-09
+
+### Documentation
+
+- **Cheatsheet mis à jour** (`guide/cheatsheet.md` + landing `cheatsheet/index.astro`) — 4 nouvelles commandes issues des releases v2.1.59–v2.1.71 : `/loop [interval] [prompt]` (scheduler récurrent, ex: `/loop 5m check the deploy`), `/stats` (graphique d'usage + streak), `/rename [name]` (nommer une session), `/copy` (picker interactif pour copier un bloc de code). Nouveau raccourci `Ctrl+F` (kill tous les background agents, double presse). `/loop` ajouté dans "Features méconnues" avec version v2.1.71. Version landing synchronisée 3.29.2 → 3.32.0.
+
 ## [3.32.1] - 2026-03-08
 
 ### Added

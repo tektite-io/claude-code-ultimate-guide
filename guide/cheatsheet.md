@@ -12,7 +12,7 @@ tags: [cheatsheet, reference]
 
 **Written with**: Claude (Anthropic)
 
-**Version**: 3.32.0 | **Last Updated**: February 2026
+**Version**: 3.32.2 | **Last Updated**: February 2026
 
 ---
 
@@ -39,6 +39,10 @@ tags: [cheatsheet, reference]
 | `/mobile` | Get Claude mobile app download links |
 | `/fast` | Toggle fast mode (2.5x speed, 6x cost) |
 | `/voice` | Toggle voice input (hold Space to speak, release to send) |
+| `/loop [interval] [prompt]` | Run a prompt on repeat (ex: `/loop 5m check the deploy`, default 10m) |
+| `/stats` | Usage graph, favorite model, streak |
+| `/rename [name]` | Name or rename the current session |
+| `/copy` | Interactive picker to copy a code block or full response |
 | `/debug` | Systematic troubleshooting |
 | `/exit` | Quit (or Ctrl+D) |
 
@@ -56,6 +60,7 @@ tags: [cheatsheet, reference]
 | `Tab` | Autocomplete |
 | `Shift+Enter` | New line |
 | `Ctrl+B` | Background tasks |
+| `Ctrl+F` | Kill all background agents (double press) |
 | `Alt+T` | Toggle thinking |
 | `Space` (hold) | Voice input (requires `/voice` enabled) |
 | `Ctrl+D` | Exit |
@@ -89,6 +94,7 @@ tags: [cheatsheet, reference]
 | **LSP Tool** | v2.0.74 | IDE-like navigation: symbols, types, refs. ~50ms vs 45s with grep. 11 languages |
 | **Voice Mode** | v2.1.x | Native voice input, free transcription, no rate limit impact |
 | **Remote Control** | v2.1.51 | Control local session from phone/browser (Research Preview, Pro/Max) |
+| **`/loop`** | v2.1.71 | Recurring scheduler: `/loop 5m check the deploy` — runs in background while you work |
 | **Skill Evals** | Mar 2026 | Two skill types: Capability Uplift (fills model gap, fades) / Encoded Preference (encodes workflow, stays). Benchmark Mode, A/B testing, Trigger Tuning. |
 
 **Activate LSP**: Add to `~/.claude/settings.json` → `{ "env": { "ENABLE_LSP_TOOL": "1" } }` (requires LSP server installed for your language: `tsserver`, `pylsp`, `gopls`, `rust-analyzer`, `sourcekit-lsp`...)
@@ -614,4 +620,4 @@ where.exe claude; claude doctor; claude mcp list
 
 **Author**: Florian BRUNIAUX | [@Méthode Aristote](https://methode-aristote.fr) | Written with Claude
 
-*Last updated: February 2026 | Version 3.32.0*
+*Last updated: February 2026 | Version 3.32.2*
