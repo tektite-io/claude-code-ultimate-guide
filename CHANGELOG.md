@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [3.34.1] - 2026-03-11
+
+### Added
+
+- **`guide/workflows/og-image-generation.md`** — New workflow guide for generating dynamic OG images at build time using Satori and resvg in Astro 5. Covers setup, font format requirements (woff1 only), static file shadowing gotcha, dynamic stat counting from content directories, testing with opengraph.xyz / LinkedIn Post Inspector, and three design variants (stats grid, personal branding, terminal badge). Includes CI size check pattern.
+
+- **`examples/scripts/og-image-astro.ts`** — Production-ready template for `src/pages/og-image.png.ts`. Drop into any Astro 5 project. Auto-serves at `/og-image.png`, counts content files dynamically, includes stat card component, author signature, and inline comments on every gotcha.
+
 ## [3.34.0] - 2026-03-11
 
 ### Added

@@ -81,6 +81,12 @@ Convert design mockups (Figma, wireframes) into working code.
 
 **When to use**: Frontend development, UI implementation, design system work
 
+### [OG Image Generation](./og-image-generation.md)
+
+Generate social preview images dynamically at build time with Satori and resvg.
+
+**When to use**: Astro projects, keeping social previews accurate without maintaining static PNGs
+
 ### [PDF Generation](./pdf-generation.md)
 
 Generate professional PDFs using Quarto/Typst with Claude Code.
@@ -166,6 +172,7 @@ Multi-session task tracking with TodoWrite, tasks API, and context persistence a
 | **New project from template** | [Skeleton Projects](./skeleton-projects.md) |
 | **Team AI instructions** | [Team AI Instructions](./team-ai-instructions.md) |
 | **Documentation** | [PDF Generation](./pdf-generation.md) |
+| **Social previews** | [OG Image Generation](./og-image-generation.md) |
 | **Conference talk from raw material** | [Talk Preparation Pipeline](./talk-pipeline.md) |
 | **Audio feedback** | [TTS Setup](./tts-setup.md) |
 | **Multi-agent tasks** | [Agent Teams](./agent-teams.md) |
