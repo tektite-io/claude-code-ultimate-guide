@@ -1,6 +1,6 @@
 ---
 name: ccboard
-description: Comprehensive TUI/Web dashboard for Claude Code monitoring
+description: "Launch and navigate the ccboard TUI/Web dashboard for Claude Code. Use when monitoring token usage, tracking costs, browsing sessions, or checking MCP server status across projects."
 version: 0.1.0
 category: monitoring
 keywords: [dashboard, tui, mcp, sessions, costs, analytics]

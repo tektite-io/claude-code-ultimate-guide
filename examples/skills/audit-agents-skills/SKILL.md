@@ -1,6 +1,6 @@
 ---
 name: audit-agents-skills
-description: Comprehensive quality audit for Claude Code agents, skills, and commands with comparative analysis
+description: "Audit Claude Code agents, skills, and commands for quality and production readiness. Use when evaluating skill quality, checking production readiness scores, or comparing agents against best-practice templates."
 allowed-tools: Read, Grep, Glob, Bash, Write
 context: inherit
 agent: specialist

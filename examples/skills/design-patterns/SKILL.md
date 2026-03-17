@@ -1,6 +1,6 @@
 ---
 name: design-patterns
-description: Analyze codebase for GoF design patterns - detection, suggestions, evaluation with stack-aware adaptations
+description: "Detect, suggest, and evaluate GoF design patterns in TypeScript/JavaScript codebases. Use when refactoring code, applying singleton/factory/observer/strategy patterns, reviewing pattern quality, or finding stack-native alternatives for React, Angular, NestJS, and Vue."
 allowed-tools: Read, Grep, Glob, mcp__grepai__grepai_search
 context: fork
 agent: specialist

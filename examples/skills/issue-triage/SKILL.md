@@ -1,9 +1,6 @@
 ---
 name: issue-triage
-description: >
-  3-phase issue backlog management: audit open issues, deep analyze selected ones, draft and execute
-  triage actions with mandatory validation. Args: "all" to analyze all, issue numbers to focus
-  (e.g. "42 57"), "en"/"fr" for language, no arg = audit only in French.
+description: "3-phase issue backlog management with audit, deep analysis, and validated triage actions. Use when triaging GitHub issues, sorting bug reports, cleaning up stale tickets, or detecting duplicate issues. Args: 'all' to analyze all, issue numbers to focus (e.g. '42 57'), 'en'/'fr' for language, no arg = audit only."
 tags: [github, issue, triage, maintainer, multi-agent]
 ---
 
