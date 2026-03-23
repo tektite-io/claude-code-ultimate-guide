@@ -2,8 +2,8 @@
 # For use with /security-check and /security-audit commands
 # Manually maintained — update after new security advisories
 
-version: "2.8.0"
-updated: "2026-03-18"
+version: "2.9.0"
+updated: "2026-03-23"
 sources:
   - name: "Snyk ToxicSkills"
     url: "https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/"
@@ -176,6 +176,30 @@ sources:
   - name: "AdminByRequest - OpenClaw Security Crisis Overview"
     url: "https://www.adminbyrequest.com/en/blogs/openclaw-went-from-viral-ai-agent-to-security-crisis-in-just-three-weeks"
     date: "2026-03-09"
+  - name: "Intel471 - OpenClaw ClickFix Infostealer Campaign"
+    url: "https://www.intel471.com/blog/openclaw-a-viral-ai-assistant-and-a-magnet-for-infostealer-malware-and-clickfix-trickery"
+    date: "2026-03-12"
+  - name: "Reco.ai - OpenClaw Security Crisis Unfolding"
+    url: "https://www.reco.ai/blog/openclaw-the-ai-agent-security-crisis-unfolding-right-now"
+    date: "2026-03-20"
+  - name: "Particula.tech - OpenClaw 250K Stars / 20% Malicious Skills"
+    url: "https://particula.tech/blog/openclaw-security-crisis-malicious-ai-agents"
+    date: "2026-03-15"
+  - name: "Dark Reading - MCP Security Cannot Be Patched Away (RSAC 2026)"
+    url: "https://www.darkreading.com/application-security/mcp-security-patched"
+    date: "2026-03-19"
+  - name: "SentinelOne - CVE-2026-4192 quip-mcp-server RCE"
+    url: "https://www.sentinelone.com/vulnerability-database/cve-2026-4192/"
+    date: "2026-03-19"
+  - name: "SentinelOne - CVE-2026-4270 AWS API MCP Server Path Traversal"
+    url: "https://www.sentinelone.com/vulnerability-database/cve-2026-4270/"
+    date: "2026-03-19"
+  - name: "Miggo.io - CVE-2026-33252 MCP Go SDK CSRF"
+    url: "https://www.miggo.io/vulnerability-database/cve/CVE-2026-33252"
+    date: "2026-03-22"
+  - name: "Miggo.io - CVE-2026-27826 MCP Atlassian SSRF"
+    url: "https://www.miggo.io/vulnerability-database/cve/CVE-2026-27826"
+    date: "2026-03-11"
 
 # ═══════════════════════════════════════════════════════════════
 # MALICIOUS AUTHORS (confirmed by security researchers)
@@ -198,11 +222,16 @@ malicious_authors:
     source: "Snyk ToxicSkills"
     risk: "critical"
     notes: "Mixed prompt-injection + exfil; GitHub repo aztr0nutzs/NET_NiNjA.v1.2 hosts additional weaponized skills"
-  # VirusTotal confirmed — single publisher, 314+ skills, 100% malicious
+  # VirusTotal confirmed — single publisher, 354+ skills, 100% malicious
   - name: "hightower6eu"
-    source: "VirusTotal OpenClaw Analysis"
+    source: "VirusTotal OpenClaw Analysis / Particula.tech"
     risk: "critical"
-    notes: "Single malicious publisher responsible for 314+ OpenClaw skills; all confirmed malicious by VirusTotal scan; malware disguised as productivity/utility tools"
+    notes: "354 malicious skills (updated March 2026; previously 314+); all confirmed malicious by VirusTotal scan; malware disguised as productivity/utility tools"
+  # Bitdefender / Particula confirmed — automated bulk submission
+  - name: "sakaen736jih"
+    source: "Particula.tech / Bitdefender (2026-03)"
+    risk: "critical"
+    notes: "199 malicious skills submitted via automation (one skill every few minutes); contributed to ClawHavoc campaign expansion from 341 to 1,184+ confirmed malicious entries by March 1, 2026"
 
 # ═══════════════════════════════════════════════════════════════
 # MALICIOUS SKILLS (confirmed by researchers)
@@ -977,6 +1006,52 @@ cve_database:
     mitigation: "Apply Microsoft March 2026 security update; restrict Azure MCP Server endpoints to trusted callers; audit managed identity permissions (principle of least privilege); monitor for unexpected outbound requests from MCP server processes"
     notes: "CWE-918 SSRF; rated 'Exploitation Less Likely' by Microsoft; part of 84-CVE March 2026 Patch Tuesday"
 
+  # --- quip-mcp-server ---
+  - id: "CVE-2026-4192"
+    component: "quip-mcp-server (version 1.0.0)"
+    severity: "high"
+    description: "Command injection in setupToolHandlers function — fails to sanitize user input before passing to system commands; allows remote attackers with low privileges to execute arbitrary commands on the underlying system"
+    source: "SentinelOne (2026-03-19)"
+    fixed_in: "no fix available at time of disclosure — maintainers unresponsive"
+    mitigation: "Avoid quip-mcp-server until patched; replace with sanitized alternatives; do not expose to untrusted networks"
+
+  # --- mcp-server-auto-commit ---
+  - id: "CVE-2026-4198"
+    component: "mcp-server-auto-commit (version 1.0.0)"
+    severity: "medium"
+    description: "Command injection in getGitChanges function in index.ts — unsanitized user input passed to shell commands; requires local access to exploit"
+    source: "SentinelOne (2026-03-19)"
+    fixed_in: "commit f7d992c830c5f2ec5749852e66c0195e3ed7fe30"
+    mitigation: "Apply patch commit f7d992c...; replace exec() with execFile() and argument arrays"
+
+  # --- MCP Go SDK ---
+  - id: "CVE-2026-33252"
+    component: "MCP Go SDK (go-sdk) Streamable HTTP transport"
+    severity: "high"
+    description: "CSRF vulnerability in Streamable HTTP transport — cross-site POST requests with text/plain content-type trigger arbitrary tool execution on local MCP servers without user interaction"
+    source: "Miggo.io (2026-03-22)"
+    fixed_in: "check upstream for patch"
+    mitigation: "Restrict MCP Go SDK HTTP servers to localhost with proper Origin validation; prefer stdio transport for local deployments; update to latest version"
+    notes: "Architectural CSRF risk in HTTP transport; any site can trigger tool calls on locally running MCP Go servers"
+
+  # --- AWS API MCP Server ---
+  - id: "CVE-2026-4270"
+    component: "AWS API MCP Server (versions 0.2.14 through 1.3.9)"
+    severity: "medium"
+    description: "Improper Protection of Alternate Path — attacker bypasses file access restrictions in no-access and workdir features, potentially exposing configuration files and credentials on local filesystem; requires local access, no authentication needed"
+    source: "SentinelOne (2026-03-19)"
+    fixed_in: "1.4.0 or later"
+    mitigation: "Update AWS API MCP Server to >= 1.4.0; restrict MCP server to trusted local users only; audit file access permissions post-update"
+
+  # --- MCP Atlassian (Confluence + Jira) ---
+  - id: "CVE-2026-27826"
+    component: "MCP Atlassian (mcp-atlassian, Confluence and Jira)"
+    severity: "high"
+    description: "Unauthenticated SSRF via header injection — prior to version 0.17.0, attacker can forge server-side requests to internal Atlassian or adjacent network resources without authentication"
+    source: "Miggo.io (2026-03-11)"
+    fixed_in: "0.17.0"
+    mitigation: "Update mcp-atlassian to >= 0.17.0; restrict MCP Atlassian to trusted networks; audit outbound requests from Atlassian MCP server"
+
   # --- Bun runtime (npm lifecycle bypass) ---
   - id: "CVE-2026-24910"
     component: "Bun runtime (bun.sh)"
@@ -1017,6 +1092,8 @@ minimum_safe_versions:
   "openclaw": "2026.1.29"
   "azure-mcp-server": "March 2026 Patch Tuesday (2026-03-10)"
   "bun": "1.3.5"
+  "mcp-atlassian": "0.17.0"
+  "aws-api-mcp-server": "1.4.0"
 
 # ═══════════════════════════════════════════════════════════════
 # IOCs (Indicators of Compromise)
@@ -1046,6 +1123,17 @@ iocs:
       skill: "rankaj"
       source: "Koi ClawHavoc"
       notes: "Credential exfiltration endpoint"
+
+  # Malicious / fake domains (ClickFix + lookalike campaigns)
+  malicious_domains:
+    - domain: "app-clawbot[.]org"
+      campaign: "ClickFix OpenClaw"
+      date: "2026-03-02"
+      notes: "Fake OpenClaw site using ClickFix social engineering to deploy obfuscated JavaScript infostealer"
+    - domain: "openclawcli.vercel.app"
+      campaign: "Fake CLI Prerequisites"
+      date: "2026-02"
+      notes: "Attacker-controlled URL referenced in malicious SKILL.md files as fake OpenClawCLI installer prerequisites; Trend Micro identified 39+ skills abusing this"
 
   # Malicious GitHub repos
   github_repos:
@@ -1233,9 +1321,10 @@ suspicious_patterns:
 # ═══════════════════════════════════════════════════════════════
 campaigns:
   - name: "ClawHavoc"
-    source: "Koi Security"
+    source: "Koi Security / Bitdefender / Particula.tech"
     date: "2026-02-01"
-    skills_count: 341
+    skills_count: 1184
+    skills_count_notes: "341 at initial Koi report (2026-02-01); grew to 1,184+ confirmed malicious by 2026-03-01 (Bitdefender 824+, additional by sakaen736jih and others); roughly 20% of expanded registry"
     amos_skills: 335
     outlier_skills: 6
     platform: "ClawHub / OpenClaw"
@@ -1374,6 +1463,33 @@ campaigns:
     sources:
       - "https://www.reversinglabs.com/blog/openclaw-agentic-ai-risk"
       - "https://www.adminbyrequest.com/en/blogs/openclaw-went-from-viral-ai-agent-to-security-crisis-in-just-three-weeks"
+
+  - name: "ClickFix OpenClaw"
+    source: "Intel471 / Huntress (2026-03-12)"
+    date: "2026-03-02"
+    platform: "Fake website / social engineering"
+    malware: "Obfuscated JavaScript infostealer"
+    technique: "Fraudulent website imitating official OpenClaw site (app-clawbot[.]org) uses ClickFix social engineering to trick users into running a highly obfuscated JavaScript infostealer; malware profiles systems and exfiltrates hostname, Windows version, CPU architecture, installed memory, uptime, and system language to C2 servers"
+    targets:
+      - "System profiling (hostname, OS version, hardware info)"
+      - "Credentials and browser data"
+    iocs:
+      - "app-clawbot[.]org (fake site)"
+    notes: "Distinct from ClawHavoc (ClawHub-based supply chain); this is social engineering targeting users who search for OpenClaw. Concurrent with search engine poisoning campaign where malicious GitHub repos appeared as top Bing AI results."
+    sources:
+      - "https://www.intel471.com/blog/openclaw-a-viral-ai-assistant-and-a-magnet-for-infostealer-malware-and-clickfix-trickery"
+
+  - name: "Fake CLI Prerequisites (openclawcli.vercel.app)"
+    source: "Trend Micro (2026-02)"
+    date: "2026-02"
+    platform: "ClawHub / SKILL.md"
+    malware: "Arbitrary malware from attacker-controlled URL"
+    technique: "At least 39 malicious skills abuse SKILL.md setup instructions to prompt installation of fake OpenClawCLI prerequisites from openclawcli.vercel.app; users following setup instructions download and execute attacker-controlled payloads"
+    iocs:
+      - "openclawcli.vercel.app"
+    notes: "Tactical variant of ClawHavoc — instead of embedding payloads directly in glot.io scripts, points to a persistent attacker-controlled domain for payloads"
+    sources:
+      - "https://www.trendmicro.com/en_us/research/26/b/openclaw-skills-used-to-distribute-atomic-macos-stealer.html"
 
   - name: "ClawHub Wave 2 (71 Skills)"
     source: "Oasis Security / The Hacker News"
@@ -1805,6 +1921,20 @@ scanning_tools:
       - "Clipboard-focused — does not scan MCP configs or SKILL.md"
     notes: "Presented at RSAC 2026 (March 2026); demonstrates gateway pattern for sensitive data interception"
 
+  - name: "AquilaX AI Agent Configuration Scanner"
+    vendor: "AquilaX"
+    type: "cli + saas"
+    url: "https://aquilax.ai/blog/mcp-security-shadow-ai-agents"
+    capabilities:
+      - "Scans AI agent configurations and MCP server definitions for security misconfigurations"
+      - "Detects overpermissive access and unsafe tool grants in agent configs"
+      - "Identifies shadow MCP deployments and unvetted AI agent tools"
+      - "Policy validation for claude_desktop_config.json and .mcp.json"
+    limitations:
+      - "Does not scan SKILL.md content for embedded malware"
+      - "Newer product — limited community adoption data"
+    notes: "Launched 2026-03-17; directly addresses T017 (Shadow MCP Deployment) pattern"
+
   - name: "Mend SAST MCP"
     vendor: "Mend.io"
     type: "mcp-server"
@@ -1896,6 +2026,11 @@ defensive_resources:
     url: "https://www.helpnetsecurity.com/2026/03/17/jozu-agent-guard-targets-ai-agents-that-evade-controls/"
     type: "tool"
     description: "Zero-trust AI runtime launched 2026-03-17. Enforces non-bypassable guardrails on agents, models, and MCP servers with artifact verification and tool-level governance. Directly addresses T013 (Autonomous Safety Control Bypass) and tool re-routing attacks."
+
+  - name: "42crunch Secure MCP Server"
+    url: "https://42crunch.com/secure-mcp-server/"
+    type: "platform"
+    description: "API security platform enforcing MCP server contracts: validates available tools, API workflows, and permitted parameters against a defined contract. Provides a secure MCP intermediary that enforces API contracts, policies, and runtime protections by default, enabling governance, auditability, and data sovereignty for agentic AI deployments."
 
   - name: "Qualys TotalAI MCP Asset Governance"
     url: "https://blog.qualys.com/product-tech/2026/03/10/from-shadow-models-to-audit-ready-ai-security-a-practical-path-with-qualys-totalai"

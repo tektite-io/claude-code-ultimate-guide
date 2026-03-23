@@ -16,7 +16,7 @@ tags: [guide, reference, workflows, agents, hooks, mcp, security]
 
 **Last updated**: January 2026
 
-**Version**: 3.37.4
+**Version**: 3.37.5
 
 ---
 
@@ -1719,6 +1719,36 @@ Create your own script that:
 ```
 
 Use `/statusline` command in Claude Code to auto-generate a starter script.
+
+**Available JSON fields (stdin)**:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `model` | string | Current model name |
+| `context` | object | `used`, `total`, `percentage` |
+| `cost_usd` | number | Session cost |
+| `git` | object | Branch, staged/unstaged counts |
+| `rate_limits` | object | Claude.ai usage (v2.1.80+) |
+
+**`rate_limits` object** (v2.1.80+) — displays Claude.ai token usage directly in the statusline without opening the dashboard:
+
+```json
+{
+  "rate_limits": {
+    "5h":  { "used_percentage": 42, "resets_at": "2026-03-20T15:30:00Z" },
+    "7d":  { "used_percentage": 18, "resets_at": "2026-03-23T00:00:00Z" }
+  }
+}
+```
+
+Example usage in a statusline script:
+
+```bash
+#!/usr/bin/env bash
+input=$(cat)
+pct_5h=$(echo "$input" | jq -r '.rate_limits["5h"].used_percentage // "?"')
+echo "RL: ${pct_5h}%"
+```
 
 ### Context Zones
 
@@ -5216,7 +5246,7 @@ The `.claude/` folder is your project's Claude Code directory for memory, settin
 | Personal preferences | `CLAUDE.md` | ❌ Gitignore |
 | Personal permissions | `settings.local.json` | ❌ Gitignore |
 
-### 3.37.4 Version Control & Backup
+### 3.37.5 Version Control & Backup
 
 **Problem**: Without version control, losing your Claude Code configuration means hours of manual reconfiguration across agents, skills, hooks, and MCP servers.
 
@@ -8974,6 +9004,7 @@ Hooks are scripts that run automatically when specific events occur.
 | `SubagentStart` | Sub-agent spawned | No | Subagent initialization |
 | `SubagentStop` | Sub-agent finishes | Yes | Subagent cleanup |
 | `Stop` | Claude finishes responding | Yes | Post-response actions, continue loops |
+| `StopFailure` | Turn ends due to API error (rate limit, auth failure) | No | Alert on quota exhaustion, observability |
 | `TeammateIdle` | Agent team member about to go idle | Yes | Team coordination, quality gates |
 | `TaskCompleted` | Task being marked as completed | Yes | Enforce completion criteria |
 | `ConfigChange` | Config file changes during session | Yes (except policy) | Enterprise audit, block unauthorized changes |
@@ -12789,9 +12820,23 @@ Think of plugins as **distributable packages** that bundle agents, skills, and c
 | `claude plugin install <name>@<marketplace>` | Install from specific marketplace | `claude plugin install linter@company` |
 | `claude plugin enable <name>` | Enable installed plugin | `claude plugin enable security-audit` |
 | `claude plugin disable <name>` | Disable plugin without removing | `claude plugin disable linter` |
-| `claude plugin uninstall <name>` | Remove plugin completely | `claude plugin uninstall security-audit` |
+| `claude plugin uninstall <name>` | Remove plugin completely (prompts before deleting persistent data) | `claude plugin uninstall security-audit` |
 | `claude plugin update [name]` | Update plugin to latest version | `claude plugin update security-audit` |
 | `claude plugin validate <path>` | Validate plugin manifest | `claude plugin validate ./my-plugin` |
+
+> **`${CLAUDE_PLUGIN_DATA}` — Persistent plugin storage (v2.1.78+)**: Plugins can store state that survives updates using the `${CLAUDE_PLUGIN_DATA}` env variable. This variable points to a dedicated directory that is preserved when the plugin is updated and only deleted on explicit `/plugin uninstall` (with confirmation prompt). Use it for caches, user preferences, or any data your plugin needs across sessions.
+>
+> ```json
+> // In your plugin's hooks.json
+> {
+>   "hooks": {
+>     "SessionStart": [{
+>       "type": "command",
+>       "command": "mkdir -p ${CLAUDE_PLUGIN_DATA}/cache && my-plugin init"
+>     }]
+>   }
+> }
+> ```
 
 ### Marketplace Management
 
@@ -14005,8 +14050,18 @@ jobs:
         run: |
           claude -p "Review the changes in this PR. \
             Focus on security, performance, and code quality. \
-            Output as markdown."
+            Output as markdown." --bare
 ```
+
+> **`--bare` flag for CI scripting (v2.1.81+)**: Add `--bare` to any `claude -p` call to get a deterministic, hermetic execution environment. It disables hooks, LSP, plugin sync, and skill directory scanning — ensuring local developer config never bleaks into CI. Requires `ANTHROPIC_API_KEY` (no OAuth/keychain). Also disables auto-memory.
+>
+> ```bash
+> # Without --bare: picks up local hooks, plugins, skills — non-deterministic in CI
+> claude -p "run tests"
+>
+> # With --bare: clean slate, API key only
+> ANTHROPIC_API_KEY=$SECRET claude -p "run tests" --bare
+> ```
 
 #### Debugging Failed CI Runs
 
@@ -23748,4 +23803,4 @@ We'll evaluate and add it to this section if it meets quality criteria.
 
 **Contributions**: Issues and PRs welcome.
 
-**Last updated**: January 2026 | **Version**: 3.37.4
+**Last updated**: January 2026 | **Version**: 3.37.5

@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [3.37.5] - 2026-03-23
+
+### Added
+- **Resource Evaluation + Integration — Veille CC Releases 2.1.77-2.1.81** (score 3/5): Weekly release summary covering 5 releases (March 17-20, 2026). Releases already tracked in claude-code-releases.yaml/md. Audit revealed 5 gaps in thematic sections: `StopFailure` hook added to Event Types table (`ultimate-guide.md`), `rate_limits` statusline field documented with JSON schema (`ultimate-guide.md`), `${CLAUDE_PLUGIN_DATA}` persistent storage documented in Plugin System section (`ultimate-guide.md`), `--bare` mode added to GitHub Actions CI example (`ultimate-guide.md`), `sandbox.filesystem` settings block (allowWrite/denyRead/allowRead) added to `guide/security/sandbox-native.md`.
+
+### Security
+- **Threat database updated to v2.9.0** (`examples/commands/resources/threat-db.yaml`): 1 new malicious author (`sakaen736jih`, 199 automated skills, Bitdefender/Particula), 5 new CVEs (CVE-2026-4192 quip-mcp-server RCE, CVE-2026-4198 mcp-server-auto-commit injection, CVE-2026-33252 MCP Go SDK CSRF, CVE-2026-4270 AWS API MCP path traversal, CVE-2026-27826 MCP Atlassian SSRF), 2 new campaigns (ClickFix OpenClaw, Fake CLI Prerequisites via openclawcli.vercel.app), 2 new IOCs (malicious domains), 1 new scanning tool (AquilaX), 1 new defensive resource (42crunch), 9 new sources. ClawHavoc stats updated (341 → 1,184+ malicious skills by March 1, 2026).
+
 ### Fixed
 - **`eval-skills` skill — removed non-official `tags` frontmatter criterion**: `tags` is not a supported field in the Claude Code skill spec. The skill was incorrectly scoring it as a quality criterion (1pt) and listing it in the parse step. Removed `tags` from frontmatter, scoring table, and parse instructions. Scoring total adjusted from 15 to 14 pts with updated thresholds (≥80% = ≥11/14, 60-79% = 8-10/14). Added an explicit note warning against using `tags`. Reported by community via Alexandre Aubert.
 

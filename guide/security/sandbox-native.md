@@ -192,7 +192,9 @@ This asymmetric policy balances usability and security:
 
 ### Configuring Filesystem Restrictions
 
-Filesystem restrictions are configured through **permission rules** (Read/Edit deny rules), not sandbox settings:
+Filesystem restrictions use both **permission rules** (for read blocking) and the **`sandbox.filesystem` settings block** (for write expansion and fine-grained read overrides).
+
+**Block reads to sensitive directories** (permission deny rules):
 
 ```json
 {
@@ -209,7 +211,29 @@ Filesystem restrictions are configured through **permission rules** (Read/Edit d
 }
 ```
 
-Write access is inherently restricted to CWD by the sandbox. To block reads to sensitive directories, use permission deny rules as shown above.
+**Expand write access or fine-tune read permissions** (`sandbox.filesystem`):
+
+```json
+{
+  "sandbox": {
+    "filesystem": {
+      "allowWrite": ["/tmp/build-output", "/home/user/reports"],
+      "denyRead":   ["/home/user/private/**"],
+      "allowRead":  ["/home/user/private/public-assets/**"]
+    }
+  }
+}
+```
+
+| Setting | Purpose | Notes |
+|---------|---------|-------|
+| `allowWrite` | Expand write access beyond CWD | Use absolute paths (v2.1.78+) |
+| `denyRead` | Block read access to specific paths | Glob patterns supported |
+| `allowRead` | Re-allow reads within a `denyRead` region (v2.1.77+) | Useful for allowlisting subtrees |
+
+> **`allowRead` use case**: You blocked `/home/user/private/**` but need Claude to read `/home/user/private/public-assets/**`. Rather than restructuring your directory, add `allowRead` to carve out the exception without widening the deny rule.
+
+Write access is inherently restricted to CWD by the sandbox. To block reads to sensitive directories, use permission deny rules or `sandbox.filesystem.denyRead`.
 
 **⚠️ Security Warning**: Overly broad write permissions enable privilege escalation:
 
