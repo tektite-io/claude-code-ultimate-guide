@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Auto Dream section** (`guide/ultimate-guide.md` ~l.4945): Community-discovered memory consolidation feature for Claude Code. Documents the 4-phase process (Orient, Gather Signal, Consolidate, Prune & Index), trigger conditions (24h + 5 sessions), access via `/memory`, and caveats about unofficial status. Sourced from Piebald-AI/claude-code-system-prompts. Added pointer in `machine-readable/reference.yaml`.
+
 ### Documentation
 
 - **Claude Code Releases**: Updated tracking to v2.1.83

@@ -3347,78 +3347,7 @@ Login is broken
 
 The more context you provide, the better Claude can help.
 
-## 2.7 Configuration Decision Guide
 
-Seven configuration mechanisms power Claude Code — knowing *which one to reach for* saves hours of trial-and-error. This guide gives you the mental shortcuts.
-
-> **Detailed coverage**: [§3 Memory & Settings](#3-memory--settings) · [§4 Agents](#4-agents) · [§5 Skills](#5-skills) · [§6 Commands](#6-commands) · [§7 Hooks](#7-hooks) · [§8 MCP Servers](#8-mcp-servers)
-
-### Semantic Roles
-
-| Role | Mechanism | One-liner |
-|------|-----------|-----------|
-| What Claude **always knows** | CLAUDE.md + `rules/*.md` | Permanent context, loaded every session |
-| How Claude **executes workflows** | Commands (`.claude/commands/`) | Step-by-step SOPs invoked on demand |
-| What Claude **can't bypass** | Hooks (`.claude/hooks/`) | Automatic guardrails, zero token cost |
-| What Claude **delegates** | Agents (`.claude/agents/`) | Isolated parallel workers with scoped context |
-| Shared **domain knowledge** | Skills (`.claude/skills/`) | Reusable modules inherited by agents |
-| **External system access** | MCP Servers | APIs, databases, tools via protocol |
-
-### Mechanism Comparison
-
-| Mechanism | When Loaded | Best For | Token Cost | Reliability |
-|-----------|-------------|----------|------------|-------------|
-| **CLAUDE.md** | Every session | Core conventions, identity | Always paid | 100% |
-| **rules/*.md** | Every session | Supplementary standing rules | Always paid | 100% |
-| **Commands** | On invocation | Repeatable multi-step workflows | Low (template) | 100% when invoked |
-| **Hooks** | On events | Guardrails, automation, enforcement | Zero | 100% (shell scripts) |
-| **Agents** | On spawn | Isolated / parallel analysis | High (full context) | 100% when spawned |
-| **Skills** | On invocation | Domain knowledge for agents | Medium | ~56% auto-invocation |
-| **MCP Servers** | Session start | External APIs and tools | Connection overhead | 100% when connected |
-
-### Decision Tree: Which Mechanism?
-
-```
-Is this needed every session, for every task?
-├─ Yes → CLAUDE.md (core) or rules/*.md (supplementary)
-│
-└─ No → Should it trigger automatically without user action?
-         ├─ Yes → HOOK (event-driven, shell script)
-         │
-         └─ No → Does it need external system access (API, DB, tool)?
-                  ├─ Yes → MCP SERVER
-                  │
-                  └─ No → Is it a repeatable workflow with defined steps?
-                           ├─ Yes → COMMAND (.claude/commands/)
-                           │
-                           └─ No → Does it need isolated context or parallel work?
-                                    ├─ Yes → AGENT (.claude/agents/)
-                                    │
-                                    └─ No → Is it shared knowledge for multiple agents?
-                                             ├─ Yes → SKILL (.claude/skills/)
-                                             │
-                                             └─ No → Add to CLAUDE.md
-```
-
-### The 56% Reliability Warning
-
-Skills are invoked **on demand** — and agents don't always invoke them. One evaluation found agents triggered skills in only 56% of cases ([Gao, 2026](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)).
-
-**Practical implications**:
-- Never put *critical* instructions only in skills — they may be silently skipped
-- Safe pattern: CLAUDE.md states **what** (always loaded), skill provides **how in detail** (on demand)
-- For agent workflows, prefer explicit skill invocation in agent frontmatter's `skills:` field
-
-> **See also**: [§3.4 Precedence Rules](#34-precedence-rules) for load order and [§5.1 Understanding Skills](#51-understanding-skills) for the full skills decision tree.
-
-### Common Mistakes
-
-| Mistake | Why It Fails | Fix |
-|---------|-------------|-----|
-| Critical rules only in skills | 44% chance of being skipped | Move to CLAUDE.md or rules/*.md |
-| Everything in CLAUDE.md | Context window bloat every session | Split: permanent → CLAUDE.md, workflows → commands |
-| Hooks for complex logic | Hooks are shell scripts, not Claude | Use hooks for enforcement, commands for multi-step workflows |
-| MCP for simple file ops | Unnecessary overhead | Use built-in file tools; MCP for external systems |
 
 ## 2.8 Structured Prompting with XML Tags
 
@@ -5013,6 +4942,33 @@ Claude Code automatically saves useful context across sessions without manual CL
 - **Auto-memories**: Personal discoveries and session context
 - **When in doubt**: Document in CLAUDE.md for team visibility — auto-memories are not committed to git
 
+### Auto Dream: Memory Consolidation (Community-Discovered)
+
+> **Community-discovered feature, not in official Anthropic release notes.** Sourced from the system prompt at [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/agent-prompt-dream-memory-consolidation.md). Some users report `/dream` returning "unknown skill" — access via `/memory` appears more reliable. Behavior may vary as the feature rolls out.
+
+After 20+ sessions, the auto-memory file can accumulate noise: stale context, contradictory facts, and outdated relative references ("yesterday's refactor"). Auto Dream runs as a background sub-agent to consolidate and prune the memory system — functioning like REM sleep for the agent's stored context.
+
+**Built on top of Auto-Memory (v2.1.59+)**. Concept pioneered by Letta/MemGPT as "sleep-time compute."
+
+**Trigger conditions** (both must be met):
+- At least 24 hours since last consolidation
+- At least 5 sessions completed since last consolidation
+
+A lock file prevents multiple instances from overlapping. The agent operates read-only on project code, with write access limited to memory files.
+
+**The 4 phases**:
+
+| Phase | Name | What happens |
+|-------|------|--------------|
+| 1 | **Orient** | Inspects the existing memory directory and index |
+| 2 | **Gather Signal** | Scans session JSONL transcripts, identifies memories that have drifted from actual code reality |
+| 3 | **Consolidate** | Merges entries into existing topic files, converts relative dates ("yesterday") to absolute, removes contradictory facts at the source |
+| 4 | **Prune & Index** | Keeps the index concise, removes stale pointers, resolves conflicts between files |
+
+**How to access**: Use the `/memory` command in Claude Code. The dedicated `/dream` command exists in the system prompt but is not consistently available across all installations.
+
+**Practical implication**: If your auto-memory file feels bloated or you notice Claude referencing outdated context, Auto Dream handles cleanup automatically — you do not need to manually edit the `MEMORY.md` file. Most relevant for long-running projects with frequent sessions.
+
 ### Single Source of Truth Pattern
 
 When using multiple AI tools (Claude Code, CodeRabbit, SonarQube, Copilot...), they can conflict if each has different conventions. The solution: **one source of truth for all tools**.
@@ -5142,20 +5098,20 @@ As projects grow, keeping everything in a single CLAUDE.md file becomes unwieldy
 
 **Why this works**: Claude loads ALL files in `.claude/rules/` at session start automatically (Section 3.2). The CLAUDE.md index stays readable at a glance while the full rule set is always active.
 
-**Path-based conditional loading**: Claude supports `paths:` frontmatter in rule files to restrict rules to specific directories. A rule that only applies to notebook code doesn't need to load in every session:
+**Path-based conditional loading**: Claude supports frontmatter in rule files to restrict rules to specific directories. A rule that only applies to notebook code doesn't need to load in every session:
 
 ```yaml
 ---
-paths:
-  - notebooks/**
-  - experiments/**
+globs: notebooks/**, experiments/**
 ---
 # Jupyter Conventions
 Always include a markdown cell explaining the experiment goal before any code.
 Never use global state between notebook cells.
 ```
 
-Rules without a `paths:` key load unconditionally. Rules with `paths:` only load when Claude is working with files that match those patterns.
+> **Warning — `paths:` array syntax fails silently.** The documented `paths:` field with a YAML array (`paths:\n  - "**/*.ts"`) does not work due to an internal CSV parser bug (confirmed in GitHub issue #17204 and 8 duplicate reports). Quoted strings under `paths:` also break silently, preserving literal quote characters in the glob. Use `globs:` with unquoted, comma-separated patterns instead. No quotes, no array syntax.
+
+Rules without a `globs:` key load unconditionally. Rules with `globs:` only load when Claude is working with files that match those patterns.
 
 **The 3-tier hierarchy** (community-validated pattern):
 
@@ -5855,9 +5811,7 @@ Since December 2025, rules can target specific file paths using YAML frontmatter
 
 ```markdown
 ---
-paths:
-  - "src/api/**/*.ts"
-  - "lib/handlers/**/*.ts"
+globs: src/api/**/*.ts, lib/handlers/**/*.ts
 ---
 
 # API Endpoint Conventions
@@ -5869,12 +5823,14 @@ These rules only apply when working with API files:
 - Include rate limiting middleware
 ```
 
-This enables progressive context loading—rules only appear when Claude works with matching files. Real-world example: Avo migrated a 600-line CLAUDE.md to ~15 path-scoped files, reporting sharper responses and easier maintenance across domains. ([Björn Jóhannsson](https://www.linkedin.com/posts/bj%C3%B6rn-j%C3%B3hannsson-72435083_your-claudemd-is-eating-your-context-window-activity-7431750526729338881-ODSs))
+> **Warning — `paths:` array syntax fails silently.** The documented `paths:` field with a YAML array is broken due to an internal CSV parser bug (`_9A()` receives a JS Array and iterates characters of the stringified value instead of the actual patterns). Quoted strings under `paths:` have the same problem, preserving literal quote characters in the glob. This is confirmed across GitHub issue #17204 and 8 duplicate reports. The workaround is to use `globs:` with unquoted, comma-separated patterns. No quotes, no YAML arrays.
+
+This enables progressive context loading: rules only appear when Claude works with matching files. Real-world example: Avo migrated a 600-line CLAUDE.md to ~15 path-scoped files, reporting sharper responses and easier maintenance across domains. ([Björn Jóhannsson](https://www.linkedin.com/posts/bj%C3%B6rn-j%C3%B3hannsson-72435083_your-claudemd-is-eating-your-context-window-activity-7431750526729338881-ODSs))
 
 **How matching works**:
 - Patterns use glob syntax (same as `.gitignore`)
 - Multiple rules can match the same file (all are loaded)
-- Rules without `paths:` frontmatter always load
+- Rules without `globs:` frontmatter always load
 
 ---
 
@@ -15310,6 +15266,8 @@ Claude: [writes handoff to claudedocs/handoffs/oauth-implementation.md]
 ### Fighting Vibe Code Degradation
 
 Vibe coding gets things built fast. The codebases it produces tend to rot in ways that are hard to see: abstractions drift, naming becomes inconsistent, error handling gets done three different ways. The code still works, but working in it gets progressively worse.
+
+"Slop" — a term [coined by Simon Willison](https://simonwillison.net/2024/May/8/slop/) in 2024 for unwanted, unreviewed AI-generated content — is the quality problem that vibe coding at scale inevitably produces.
 
 **Desloppify** ([github.com/peteromallet/desloppify](https://github.com/peteromallet/desloppify)) is a community tool that directly addresses this. It installs a workflow guide into Claude Code as a skill, then runs a prioritized fix loop: scan → get next issue → fix → resolve → repeat until a quality score target is hit. The scoring is designed to resist gaming — improving the number requires actually improving the code.
 
